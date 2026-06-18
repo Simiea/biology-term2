@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 2.7 — Second Line of Defence</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple-50: #EEEDFE;
+    --purple-100: #CECBF6;
+    --purple-400: #7F77DD;
+    --purple-600: #534AB7;
+    --purple-700: #3C3489;
+    --purple-900: #26215C;
+    --teal-50: #E1F5EE;
+    --teal-100: #9FE1CB;
+    --teal-400: #1D9E75;
+    --teal-700: #0F6E56;
+    --coral-50: #FAECE7;
+    --coral-400: #D85A30;
+    --coral-700: #993C1D;
+    --amber-50: #FAEEDA;
+    --amber-400: #BA7517;
+    --amber-700: #854F0B;
+    --blue-50: #E6F1FB;
+    --blue-400: #378ADD;
+    --blue-700: #185FA5;
+    --green-50: #EAF3DE;
+    --green-400: #639922;
+    --green-700: #3B6D11;
+    --slate: #1C1E21;
+    --slate-60: #4A4E57;
+    --slate-40: #7A7F8A;
+    --slate-15: #EAEBEC;
+    --slate-10: #F0F1F3;
+    --slate-5: #F8F9FA;
+    --white: #FFFFFF;
+    --border: rgba(0,0,0,0.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--slate-5);
+    color: var(--slate);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.93);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 54px;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; }
+  .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple-400); }
+  .nav-label { font-size: 13px; font-weight: 500; color: var(--slate-60); letter-spacing: .01em; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--slate-40); text-decoration: none; font-weight: 400; transition: color .15s; }
+  .nav-links a:hover { color: var(--slate); }
+
+  /* HERO */
+  .hero {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 55%; height: 100%;
+    background: radial-gradient(ellipse at 75% 40%, rgba(127,119,221,.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 760px; margin: 0 auto; position: relative; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--purple-700); background: var(--purple-50);
+    padding: 5px 12px; border-radius: 20px; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600; line-height: 1.2;
+    color: var(--slate); margin-bottom: 1.25rem; letter-spacing: -.01em;
+  }
+  .hero h1 em { font-style: italic; color: var(--purple-600); }
+  .hero-lead { font-size: 16px; color: var(--slate-60); max-width: 580px; line-height: 1.75; margin-bottom: 2rem; }
+  .hero-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .stat { display: flex; flex-direction: column; gap: 3px; }
+  .stat-num { font-size: 22px; font-weight: 600; color: var(--slate); font-family: 'Lora', serif; }
+  .stat-label { font-size: 12px; color: var(--slate-40); text-transform: uppercase; letter-spacing: .07em; font-weight: 500; }
+
+  /* PAGE */
+  .page { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+  /* SECTION HEADERS */
+  .section-head {
+    display: flex; align-items: baseline; gap: 1rem;
+    margin-bottom: 1.5rem; padding-bottom: .75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head h2 { font-family: 'Lora', serif; font-size: 1.35rem; font-weight: 600; color: var(--slate); }
+  .badge {
+    font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 4px; white-space: nowrap;
+  }
+  .badge-purple { background: var(--purple-50); color: var(--purple-700); }
+  .badge-teal   { background: var(--teal-50);   color: var(--teal-700); }
+  .badge-coral  { background: var(--coral-50);  color: var(--coral-700); }
+  .badge-amber  { background: var(--amber-50);  color: var(--amber-700); }
+  .badge-blue   { background: var(--blue-50);   color: var(--blue-700); }
+  .badge-green  { background: var(--green-50);  color: var(--green-700); }
+
+  /* INTRO CARDS */
+  .intro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 3rem; }
+  .intro-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.4rem 1.5rem;
+  }
+  .intro-card h3 { font-size: 14px; font-weight: 600; margin-bottom: .4rem; }
+  .intro-card p { font-size: 13px; color: var(--slate-60); line-height: 1.65; }
+  .ic-icon { font-size: 22px; margin-bottom: .6rem; display: block; }
+
+  /* RESPONSES STRIP */
+  .responses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 3rem; }
+  .resp-card { background: var(--white); padding: 1.25rem 1rem; text-align: center; }
+  .resp-icon-wrap {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto .75rem; font-size: 20px;
+  }
+  .ri-purple { background: var(--purple-50); }
+  .ri-coral  { background: var(--coral-50); }
+  .ri-amber  { background: var(--amber-50); }
+  .ri-blue   { background: var(--blue-50); }
+  .resp-card h3 { font-size: 13px; font-weight: 600; margin-bottom: .3rem; }
+  .resp-card p  { font-size: 12px; color: var(--slate-40); line-height: 1.5; }
+
+  /* TABLES */
+  .btable-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--white); margin-bottom: 2.5rem; }
+  .btable { width: 100%; border-collapse: collapse; }
+  .btable thead tr { background: var(--slate-5); }
+  .btable th { text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--slate-40); border-bottom: 1px solid var(--border); }
+  .btable td { padding: 13px 16px; font-size: 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.65; }
+  .btable tr:last-child td { border-bottom: none; }
+  .btable td:first-child { font-weight: 600; color: var(--slate); width: 160px; white-space: nowrap; }
+  .btable td:last-child { color: var(--slate-60); }
+  .btable tr:hover td { background: var(--slate-5); }
+
+  /* HIGHLIGHT */
+  .highlight {
+    border-left: 3px solid var(--purple-400);
+    border-radius: 0 10px 10px 0;
+    padding: 1.1rem 1.4rem; margin: 1.5rem 0;
+    background: var(--purple-50);
+  }
+  .highlight h3 { font-family: 'Lora', serif; font-size: 15px; font-weight: 600; color: var(--purple-900); margin-bottom: .35rem; }
+  .highlight p  { font-size: 14px; color: var(--purple-700); line-height: 1.7; }
+  .highlight-teal { border-left-color: var(--teal-400); background: var(--teal-50); }
+  .highlight-teal h3 { color: var(--teal-700); }
+  .highlight-teal p  { color: var(--teal-700); }
+  .highlight-amber { border-left-color: var(--amber-400); background: var(--amber-50); }
+  .highlight-amber h3 { color: var(--amber-700); }
+  .highlight-amber p  { color: var(--amber-700); }
+
+  /* STEP FLOW */
+  .steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
+  .step {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1.1rem 1.25rem; background: var(--white);
+    border: 1px solid var(--border); border-bottom: none;
+    position: relative;
+  }
+  .step:first-child { border-radius: 12px 12px 0 0; }
+  .step:last-child  { border-radius: 0 0 12px 12px; border-bottom: 1px solid var(--border); }
+  .step-num {
+    min-width: 28px; height: 28px; border-radius: 50%;
+    background: var(--purple-50); color: var(--purple-700);
+    font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  .step h3 { font-size: 14px; font-weight: 600; margin-bottom: .25rem; color: var(--slate); }
+  .step p  { font-size: 13px; color: var(--slate-60); line-height: 1.6; }
+
+  /* CHEMICALS GRID */
+  .chem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 2.5rem; }
+  .chem-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .chem-tag {
+    display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 4px; margin-bottom: .6rem;
+  }
+  .ct-purple { background: var(--purple-50); color: var(--purple-700); }
+  .ct-teal   { background: var(--teal-50);   color: var(--teal-700); }
+  .ct-coral  { background: var(--coral-50);  color: var(--coral-700); }
+  .ct-amber  { background: var(--amber-50);  color: var(--amber-700); }
+  .chem-card h3 { font-size: 14px; font-weight: 600; margin-bottom: .4rem; color: var(--slate); }
+  .chem-card p  { font-size: 13px; color: var(--slate-60); line-height: 1.65; }
+  .chem-card ul { font-size: 13px; color: var(--slate-60); padding-left: 1.1rem; line-height: 1.7; }
+
+  /* COMPLEMENT */
+  .comp-actions { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 2.5rem; }
+  .comp-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem 1rem;
+  }
+  .comp-num {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--purple-50); color: var(--purple-700);
+    font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; margin-bottom: .75rem;
+  }
+  .comp-card h3 { font-size: 13px; font-weight: 600; margin-bottom: .35rem; }
+  .comp-card p  { font-size: 12px; color: var(--slate-60); line-height: 1.6; }
+
+  /* INFLAMMATION */
+  .inflam-signs { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 1.25rem 0 2rem; }
+  .sign-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem; text-align: center;
+  }
+  .sign-icon { font-size: 22px; margin-bottom: .4rem; display: block; }
+  .sign-card h3 { font-size: 13px; font-weight: 600; margin-bottom: .25rem; }
+  .sign-card p  { font-size: 12px; color: var(--slate-60); line-height: 1.5; }
+
+  /* FEVER */
+  .fever-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 2.5rem; }
+  .fever-stat {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem 1.5rem;
+  }
+  .fever-stat .big { font-family: 'Lora', serif; font-size: 28px; font-weight: 600; color: var(--coral-400); margin-bottom: .2rem; }
+  .fever-stat .label { font-size: 12px; color: var(--slate-40); text-transform: uppercase; letter-spacing: .07em; font-weight: 500; }
+  .fever-stat p { font-size: 13px; color: var(--slate-60); margin-top: .4rem; line-height: 1.6; }
+
+  /* ORGANISMS TABS */
+  .tab-bar {
+    display: flex; gap: 4px; margin-bottom: 1.5rem;
+    background: var(--slate-10); padding: 4px; border-radius: 10px; width: fit-content;
+  }
+  .tab-btn {
+    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+    padding: 7px 16px; border-radius: 7px; border: none;
+    background: transparent; color: var(--slate-40); cursor: pointer; transition: all .15s;
+  }
+  .tab-btn.active { background: var(--white); color: var(--slate); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ORG ROWS */
+  .org-row {
+    display: flex; gap: 1rem; align-items: flex-start;
+    background: var(--white); border: 1px solid var(--border);
+    border-bottom: none; padding: 1.1rem 1.25rem;
+  }
+  .org-row:first-child { border-radius: 12px 12px 0 0; }
+  .org-row:last-child  { border-radius: 0 0 12px 12px; border-bottom: 1px solid var(--border); }
+  .org-icon { font-size: 22px; margin-top: 2px; flex-shrink: 0; width: 36px; text-align: center; }
+  .org-row h3 { font-size: 14px; font-weight: 600; margin-bottom: .2rem; color: var(--slate); }
+  .org-row p  { font-size: 13px; color: var(--slate-60); line-height: 1.65; }
+
+  /* BACTERIA SPECIAL */
+  .bac-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 1rem; }
+  .bac-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .bac-card h3 { font-size: 14px; font-weight: 600; margin-bottom: .4rem; color: var(--slate); }
+  .bac-card p  { font-size: 13px; color: var(--slate-60); line-height: 1.65; }
+  .mono { font-family: monospace; font-size: 12px; background: var(--slate-10); padding: 2px 6px; border-radius: 4px; color: var(--slate-60); }
+
+  /* PLANTS */
+  .plant-chemicals {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: .75rem 0;
+  }
+  .plant-pill {
+    font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px;
+    background: var(--green-50); color: var(--green-700);
+    border: 1px solid rgba(99,153,34,.2);
+  }
+
+  /* TAKEAWAY */
+  .takeaway {
+    background: var(--slate); border-radius: 16px;
+    padding: 2.5rem; margin-top: 3rem;
+    display: flex; gap: 1.5rem; align-items: flex-start;
+  }
+  .takeaway-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: rgba(255,255,255,.1); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .takeaway h2 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--white); margin-bottom: .5rem; }
+  .takeaway p  { font-size: 14px; color: rgba(255,255,255,.65); line-height: 1.75; }
+  .takeaway strong { color: #CECBF6; font-weight: 500; }
+
+  /* SPACER */
+  .mt-3 { margin-top: 3rem; }
+  .mb-2 { margin-bottom: 2rem; }
+
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--slate-40); border-top: 1px solid var(--border); }
+
+  @media (max-width: 640px) {
+    .responses, .comp-actions, .inflam-signs { grid-template-columns: repeat(2,1fr); }
+    .intro-grid, .chem-grid, .fever-grid, .bac-grid { grid-template-columns: 1fr; }
+    .btable td:first-child { white-space: normal; width: auto; }
+    .hero h1 { font-size: 1.8rem; }
+    .takeaway { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-dot"></div>
+    <span class="nav-label">Topic 2 · Infectious Disease</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#cells">Cells</a></li>
+    <li><a href="#chemicals">Chemicals</a></li>
+    <li><a href="#responses">Responses</a></li>
+    <li><a href="#organisms">Organisms</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">2.7 &nbsp;·&nbsp; Second Line of Defence</div>
+    <h1>When pathogens<br><em>breach the surface</em></h1>
+    <p class="hero-lead">Once a pathogen penetrates the first line, the innate immune system fires a rapid, non-specific internal response — the same reaction, regardless of the invader. This is the second line of defence.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">4</span>
+        <span class="stat-label">Main responses</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">30+</span>
+        <span class="stat-label">Complement proteins</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">38°C</span>
+        <span class="stat-label">Fever threshold</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">40+</span>
+        <span class="stat-label">Types of cytokine</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="section-head">
+      <h2>How the second line works</h2>
+      <span class="badge badge-purple">Non-specific · Innate</span>
+    </div>
+    <div class="intro-grid mb-2">
+      <div class="intro-card">
+        <span class="ic-icon">🎯</span>
+        <h3>Non-self recognition</h3>
+        <p>Innate immune cells use pattern recognition receptors to detect pathogen-associated molecular patterns (PAMPs) — surface structures found on pathogens but not on host cells. They cannot distinguish between different pathogen types, only detect "non-self."</p>
+      </div>
+      <div class="intro-card">
+        <span class="ic-icon">⚡</span>
+        <h3>Rapid but non-specific</h3>
+        <p>Unlike the adaptive immune system, the innate response does not change or adapt over a lifetime. It responds the same way to all pathogens — fast and broad. Humans are born with it; so are bacteria, fungi, plants, and invertebrates.</p>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>The four main responses</h2>
+      <span class="badge badge-purple">Second line</span>
+    </div>
+    <div class="responses">
+      <div class="resp-card">
+        <div class="resp-icon-wrap ri-purple">🔥</div>
+        <h3>Inflammation</h3>
+        <p>Immediate localised reaction to contain damage and recruit immune cells</p>
+      </div>
+      <div class="resp-card">
+        <div class="resp-icon-wrap ri-coral">🌡️</div>
+        <h3>Fever</h3>
+        <p>Elevated body temperature to inhibit pathogen growth and boost defences</p>
+      </div>
+      <div class="resp-card">
+        <div class="resp-icon-wrap ri-amber">🫧</div>
+        <h3>Phagocytosis</h3>
+        <p>Phagocytic cells engulf and digest invading pathogens</p>
+      </div>
+      <div class="resp-card">
+        <div class="resp-icon-wrap ri-blue">🔗</div>
+        <h3>Complement system</h3>
+        <p>Cascade of 30+ proteins that tag, puncture, and destroy pathogens</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CELLS -->
+  <section id="cells">
+    <div class="section-head">
+      <h2>Cells of the innate immune system</h2>
+      <span class="badge badge-amber">Leukocytes</span>
+    </div>
+    <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.25rem;line-height:1.7">White blood cells (leukocytes) form in the bone marrow and patrol via the circulatory system, migrating to infected tissues during an immune response. The cells below are the key players in the non-specific innate response.</p>
+
+    <div class="btable-wrap">
+      <table class="btable">
+        <thead><tr><th>Cell type</th><th>Role in the innate immune response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Monocytes</td>
+            <td>Circulate in the blood and migrate to infected tissues, where they can differentiate into macrophages and dendritic cells in response to inflammation signals.</td>
+          </tr>
+          <tr>
+            <td>Neutrophils</td>
+            <td>The most abundant white blood cell — typically the first to arrive at a site of infection. Phagocytic cells that engulf and destroy invading pathogens. Short-lived; their accumulation forms pus. Not involved in antigen presentation.</td>
+          </tr>
+          <tr>
+            <td>Mast cells</td>
+            <td>Abundant in tissues. In response to damage or immune signals they release histamine, dilating blood vessels and increasing permeability to initiate inflammation.</td>
+          </tr>
+          <tr>
+            <td>Macrophages</td>
+            <td>The most efficient phagocytic cell — develop from monocytes and can engulf large numbers of pathogens. Release cytokines to recruit other immune cells. Also act as antigen presenting cells, bridging innate and adaptive immunity.</td>
+          </tr>
+          <tr>
+            <td>Dendritic cells</td>
+            <td>Found in tissue fluid; also develop from monocytes. Phagocytic, but primarily known as antigen presenting cells that activate the adaptive immune system.</td>
+          </tr>
+          <tr>
+            <td>Natural killer cells</td>
+            <td>Lymphocytes, but part of the innate (not adaptive) immune system. Destroy cancerous or virus-infected host cells to stop spread of infection — a non-specific role analogous to cytotoxic T-cells.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PHAGOCYTOSIS -->
+    <div class="section-head">
+      <h2>Phagocytosis</h2>
+      <span class="badge badge-amber">Key process</span>
+    </div>
+    <div class="highlight">
+      <h3>What is phagocytosis?</h3>
+      <p>Phagocytosis (endocytosis) is the process by which phagocytic cells — neutrophils, macrophages, and dendritic cells — recognise, engulf, and destroy pathogens. The three cell types can reside permanently in tissues, circulate the body, or be recruited to infection sites via cytokine signals.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Recognition</h3>
+          <p>The phagocyte recognises non-self surface molecules (PAMPs) on the pathogen using pattern recognition receptors.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Binding &amp; engulfment</h3>
+          <p>The phagocyte binds to the pathogen and engulfs it, forming a membrane-bound sac called a phagosome inside the cell.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Lysosome fusion</h3>
+          <p>Lysosomes (containing digestive enzymes) fuse with the phagosome, forming a phagolysosome.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Destruction</h3>
+          <p>The digestive enzymes within the phagolysosome break down and destroy the trapped pathogen completely.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHEMICALS -->
+  <section id="chemicals" class="mt-3">
+    <div class="section-head">
+      <h2>Chemical signals of the innate system</h2>
+      <span class="badge badge-purple">Signalling molecules</span>
+    </div>
+    <div class="chem-grid">
+      <div class="chem-card">
+        <span class="chem-tag ct-purple">Cytokines</span>
+        <h3>Cytokines (overview)</h3>
+        <p>Signalling proteins secreted by leukocytes and infected cells. They regulate inflammation and immune cell communication. Over 40 types exist, including chemokines, interferons, and interleukins.</p>
+      </div>
+      <div class="chem-card">
+        <span class="chem-tag ct-teal">Chemokines</span>
+        <h3>Chemokines</h3>
+        <p>A type of cytokine released in response to infection. They function as chemical signals that guide leukocytes along concentration gradients toward the site of infection.</p>
+      </div>
+      <div class="chem-card">
+        <span class="chem-tag ct-coral">Interferons</span>
+        <h3>Interferons</h3>
+        <p>Proteins secreted by virus-infected host cells. They "interfere" with viral spread by:</p>
+        <ul style="margin-top:.5rem">
+          <li>Signalling uninfected cells to destroy RNA and reduce protein synthesis</li>
+          <li>Triggering programmed cell death in infected cells</li>
+          <li>Activating macrophages and other immune cells</li>
+        </ul>
+      </div>
+      <div class="chem-card">
+        <span class="chem-tag ct-purple">Interleukins</span>
+        <h3>Interleukins</h3>
+        <p>Cytokines that direct immune cells to divide and differentiate. Their name reflects their role: <em>inter</em> (between) + <em>leukins</em> (leukocytes). They also help bridge the innate and adaptive immune responses via antigen presenting cells.</p>
+      </div>
+      <div class="chem-card" style="grid-column: 1 / -1;">
+        <span class="chem-tag ct-amber">Histamine</span>
+        <h3>Histamine</h3>
+        <p>Released by mast cells (and other immune cells) in response to injury, inflammation, or allergic reactions. Causes <strong>vasodilation</strong> — widening capillaries and making them more permeable — which allows leukocytes and other immune substances to rapidly migrate from the blood into the site of infection. Unlike cytokines, histamine is not classified as a cytokine.</p>
+      </div>
+    </div>
+
+    <!-- COMPLEMENT SYSTEM -->
+    <div class="section-head">
+      <h2>The complement system</h2>
+      <span class="badge badge-blue">Innate · Bridges adaptive</span>
+    </div>
+    <div class="highlight" style="border-left-color: var(--blue-400); background: var(--blue-50);">
+      <h3 style="color: var(--blue-700)">What is the complement system?</h3>
+      <p style="color: var(--blue-700)">An ancient system (evolved ~700 million years ago) of 30+ antimicrobial proteins synthesised primarily by the liver. They circulate inactive in blood plasma and tissue fluid until triggered by infection or tissue damage. Upon activation, complement proteins coat pathogens in a cascade effect — each binding triggering the next — leading to three key actions.</p>
+    </div>
+    <div class="comp-actions">
+      <div class="comp-card">
+        <div class="comp-num">1</div>
+        <h3>Attract phagocytes (opsonisation)</h3>
+        <p>Complement proteins bind to pathogen surface molecules, flagging them for destruction and drawing phagocytes to the site of infection.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-num">2</div>
+        <h3>Puncture cell membranes</h3>
+        <p>Complement proteins assemble into a membrane attack complex that punches holes in the pathogen's cell membrane, causing it to rupture and die.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-num">3</div>
+        <h3>Stimulate histamine release</h3>
+        <p>Complement proteins bind to mast cells, triggering histamine release — intensifying the inflammatory response and recruiting more leukocytes.</p>
+      </div>
+    </div>
+    <div class="highlight highlight-teal">
+      <h3>Why "complement"?</h3>
+      <p>The system is named because it complements both innate and adaptive immunity. It is particularly attracted to pathogens already tagged by antibodies from the adaptive immune system — the antibodies provide attachment sites for complement proteins.</p>
+    </div>
+  </section>
+
+  <!-- RESPONSES -->
+  <section id="responses" class="mt-3">
+    <!-- INFLAMMATION -->
+    <div class="section-head">
+      <h2>The inflammatory response</h2>
+      <span class="badge badge-coral">Immediate reaction</span>
+    </div>
+    <p style="font-size:14px;color:var(--slate-60);margin-bottom:1rem;line-height:1.7">The inflammatory response is the body's immediate reaction to infection or tissue injury. Damaged or immune cells detect harmful stimuli and release cytokines and histamines, triggering a cascade that localises the response and recruits immune cells.</p>
+    <div class="inflam-signs">
+      <div class="sign-card">
+        <span class="sign-icon">🔴</span>
+        <h3>Redness</h3>
+        <p>Increased blood flow delivers oxygen and immune cells to the area</p>
+      </div>
+      <div class="sign-card">
+        <span class="sign-icon">🌡️</span>
+        <h3>Heat</h3>
+        <p>Also due to increased blood flow — warming the local tissue</p>
+      </div>
+      <div class="sign-card">
+        <span class="sign-icon">💧</span>
+        <h3>Swelling</h3>
+        <p>Fluid leaks into tissues as blood vessel permeability increases</p>
+      </div>
+      <div class="sign-card">
+        <span class="sign-icon">⚡</span>
+        <h3>Pain</h3>
+        <p>Pressure from swelling and pain-inducing chemicals like prostaglandins</p>
+      </div>
+    </div>
+    <div class="btable-wrap">
+      <table class="btable">
+        <thead><tr><th>Stage</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Detection</td>
+            <td>Damaged cells or immune cells detect pathogens or tissue injury and release cytokines and histamines.</td>
+          </tr>
+          <tr>
+            <td>Vasodilation</td>
+            <td>Blood vessels widen (vasodilation) and become more permeable, allowing immune cells and fluid to move into the affected area.</td>
+          </tr>
+          <tr>
+            <td>Recruitment</td>
+            <td>Chemokines guide neutrophils and macrophages to the site. These cells destroy pathogens via phagocytosis.</td>
+          </tr>
+          <tr>
+            <td>Repair</td>
+            <td>Immune cells release blood clotting factors that seal wounds, forming a scab. Dead neutrophils accumulate as pus beneath developing scabs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FEVER -->
+    <div class="section-head">
+      <h2>Fever</h2>
+      <span class="badge badge-coral">Systemic response</span>
+    </div>
+    <div class="fever-grid">
+      <div class="fever-stat">
+        <div class="big">37°C</div>
+        <div class="label">Normal body temperature</div>
+        <p>The standard internal temperature maintained by healthy humans at rest.</p>
+      </div>
+      <div class="fever-stat">
+        <div class="big">&gt;38°C</div>
+        <div class="label">Fever threshold</div>
+        <p>Above this, signals from the hypothalamus elevate body temperature in response to a detected infection.</p>
+      </div>
+    </div>
+    <div class="highlight highlight-amber">
+      <h3>Why fever helps</h3>
+      <p>Elevated temperature inhibits the growth of many bacteria and viruses, accelerates immune cell activity, and improves the production of infection-fighting molecules like antibodies. Shivering and vasoconstriction raise the temperature; sweating and vasodilation bring it back down when the fever breaks.</p>
+    </div>
+  </section>
+
+  <!-- ORGANISMS -->
+  <section id="organisms" class="mt-3">
+    <div class="section-head">
+      <h2>Innate immunity across organisms</h2>
+      <span class="badge badge-green">Comparative biology</span>
+    </div>
+    <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.5rem;line-height:1.7">Vertebrates have both innate and adaptive immunity. Fungi, invertebrates, plants, and bacteria rely solely on innate responses — they have no adaptive immune system.</p>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('invertebrates',this)">Invertebrates</button>
+      <button class="tab-btn" onclick="showTab('plants',this)">Plants</button>
+      <button class="tab-btn" onclick="showTab('fungi',this)">Fungi</button>
+      <button class="tab-btn" onclick="showTab('bacteria',this)">Bacteria</button>
+    </div>
+
+    <!-- INVERTEBRATES -->
+    <div id="tab-invertebrates" class="tab-panel active">
+      <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.25rem;line-height:1.7">Animals without a backbone — insects, arachnids, molluscs, crustaceans. Their innate immunity is their only immunity.</p>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div class="org-row" style="border-radius:12px 12px 0 0; border-bottom:none;">
+          <div class="org-icon">🦀</div>
+          <div>
+            <h3>Exoskeleton</h3>
+            <p>A tough physical barrier made of chitin prevents pathogen entry — equivalent to the first line of defence in vertebrates.</p>
+          </div>
+        </div>
+        <div class="org-row" style="border-radius:0; border-bottom:none;">
+          <div class="org-icon">🩸</div>
+          <div>
+            <h3>Hemocytes</h3>
+            <p>Immune cells in hemolymph (the blood equivalent). They perform phagocytosis to engulf and destroy pathogens and release signalling molecules to coordinate the immune response.</p>
+          </div>
+        </div>
+        <div class="org-row" style="border-radius:0; border-bottom:none;">
+          <div class="org-icon">🔍</div>
+          <div>
+            <h3>Pattern recognition</h3>
+            <p>Use the same principle as vertebrates — pattern recognition molecules detect non-self antigens and activate immune defences.</p>
+          </div>
+        </div>
+        <div class="org-row" style="border-radius:0 0 12px 12px; border-bottom:1px solid var(--border);">
+          <div class="org-icon">⚗️</div>
+          <div>
+            <h3>Antimicrobial chemicals</h3>
+            <p>Secrete lysozymes and antimicrobial peptides to neutralise or kill invading microbes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLANTS -->
+    <div id="tab-plants" class="tab-panel">
+      <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.25rem;line-height:1.7">Multicellular photosynthetic organisms — trees, grasses, flowering plants. Immobile, so innate defences are critical.</p>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div class="org-row" style="border-radius:12px 12px 0 0; border-bottom:none;">
+          <div class="org-icon">🌿</div>
+          <div>
+            <h3>Physical barriers</h3>
+            <p>Waxy cuticle, cell walls, and bark prevent pathogen entry. Some plants also practice leaf dropping — shedding infected leaves to isolate and remove infection.</p>
+          </div>
+        </div>
+        <div class="org-row" style="border-radius:0; border-bottom:none;">
+          <div class="org-icon">🔍</div>
+          <div>
+            <h3>Pattern recognition</h3>
+            <p>Plants use pattern recognition molecules to detect pathogen-associated patterns, triggering defence responses — the same principle as vertebrate innate immunity.</p>
+          </div>
+        </div>
+        <div class="org-row" style="border-radius:0 0 12px 12px; border-bottom:1px solid var(--border);">
+          <div class="org-icon">☕</div>
+          <div>
+            <h3>Antimicrobial chemicals — harvested by humans</h3>
+            <p>Plants produce toxic chemicals to defend against bacteria, fungi, and insects. Humans have adapted many of these for their own use:</p>
+            <div class="plant-chemicals">
+              <span class="plant-pill">☕ Caffeine — stimulant</span>
+              <span class="plant-pill">🍫 Cocoa — food manufacturing</span>
+              <span class="plant-pill">🚬 Nicotine — insecticide / drug</span>
+              <span class="plant-pill">💊 Quinine — antimalarial / tonic water</span>
+              <span class="plant-pill">🌼 Pyrethrins — plant-based insecticide</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUNGI -->
+    <div id="tab-fungi" class="tab-panel">
+      <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.25rem;line-height:1.7">Fungi defend against competing microorganisms using physical and chemical innate strategies.</p>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div class="org-row" style="border-radius:12px 12px 0 0; border-bottom:none;">
+          <div class="org-icon">🧱</div>
+          <div>
+            <h3>Rigid cell walls</h3>
+            <p>Fungal cell walls are composed of chitin — the same tough material as invertebrate exoskeletons. This provides a strong physical barrier against pathogen entry.</p>
+          </div>
+        </div>
+        <div class="org-row" style="border-radius:0 0 12px 12px; border-bottom:1px solid var(--border);">
+          <div class="org-icon">💊</div>
+          <div>
+            <h3>Antimicrobial chemicals — antibiotics</h3>
+            <p>Fungi produce antibiotics to inhibit or kill competing microorganisms. The most famous example is <em>Penicillium</em>, which naturally produces penicillin as part of its own innate defence system — a discovery that revolutionised human medicine.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACTERIA -->
+    <div id="tab-bacteria" class="tab-panel">
+      <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.25rem;line-height:1.7">Bacteria face constant attack from bacteriophages (viruses) and competing bacteria, and have evolved sophisticated innate defences.</p>
+      <div class="bac-grid">
+        <div class="bac-card">
+          <h3>Antibiotics</h3>
+          <p>Bacteria like <em>Streptomyces</em> produce a wide range of antibiotics (e.g. streptomycin, tetracycline) to inhibit protein synthesis in competing bacteria. Biofilms can protect them from antibiotics produced by rivals, as the chemicals often cannot penetrate the film.</p>
+        </div>
+        <div class="bac-card">
+          <h3>Restriction enzymes</h3>
+          <p>Molecular "scissors" that recognise and cut DNA at specific restriction sites. When a virus infects a bacterium, the viral DNA is recognised as foreign and cut, preventing replication. A classic non-specific innate defence.</p>
+        </div>
+        <div class="bac-card" style="grid-column: 1 / -1;">
+          <h3><span class="mono">CRISPR</span> — an adaptive component</h3>
+          <p>CRISPR (Clustered Regularly Interspaced Short Palindromic Repeats) is a unique bacterial defence that stores fragments of past viral DNA as memory sequences. If the same virus attacks again, Cas proteins are directed to the matching viral DNA to cut and disable it. This gives CRISPR a memory component — making it the only bacterial defence with an adaptive character. Both restriction enzymes and CRISPR are now used by humans in genetic engineering.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway">
+    <div class="takeaway-icon">🔑</div>
+    <div>
+      <h2>The key principle</h2>
+      <p>The second line of defence is <strong>rapid but non-specific</strong> — the innate system responds identically to all pathogens. Inflammation, fever, phagocytosis, and the complement system work together to slow and neutralise invaders. Crucially, macrophages and dendritic cells also act as <strong>antigen presenting cells</strong>, handing information to the adaptive immune system and bridging the second and third lines of defence.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Topic 2.7 · Second Line of Defence &nbsp;·&nbsp; © Essentials Education 2025 &nbsp;·&nbsp; Biology Stage 2
+</footer>
+
+<script>
+  function showTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

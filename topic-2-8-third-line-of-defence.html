@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 2.8 — Third Line of Defence</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral-50:#FAECE7; --coral-100:#F5C4B3; --coral-400:#D85A30; --coral-600:#993C1D; --coral-700:#993C1D; --coral-900:#4A1B0C;
+    --teal-50:#E1F5EE; --teal-100:#9FE1CB; --teal-400:#1D9E75; --teal-700:#0F6E56; --teal-900:#04342C;
+    --purple-50:#EEEDFE; --purple-400:#7F77DD; --purple-600:#534AB7; --purple-700:#3C3489; --purple-900:#26215C;
+    --amber-50:#FAEEDA; --amber-400:#BA7517; --amber-700:#854F0B;
+    --blue-50:#E6F1FB; --blue-400:#378ADD; --blue-700:#185FA5;
+    --green-50:#EAF3DE; --green-400:#639922; --green-700:#3B6D11;
+    --pink-50:#FBEAF0; --pink-400:#D4537E; --pink-700:#72243E;
+    --slate:#1C1E21; --slate-60:#4A4E57; --slate-40:#7A7F8A; --slate-15:#EAEBEC; --slate-10:#F0F1F3; --slate-5:#F8F9FA;
+    --white:#FFFFFF; --border:rgba(0,0,0,0.08);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--slate-5);color:var(--slate);line-height:1.7;font-size:15px}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:54px}
+  .nav-brand{display:flex;align-items:center;gap:10px}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:var(--coral-400)}
+  .nav-label{font-size:13px;font-weight:500;color:var(--slate-60);letter-spacing:.01em}
+  .nav-links{display:flex;gap:1.5rem;list-style:none}
+  .nav-links a{font-size:13px;color:var(--slate-40);text-decoration:none;font-weight:400;transition:color .15s}
+  .nav-links a:hover{color:var(--slate)}
+
+  /* HERO */
+  .hero{background:var(--white);border-bottom:1px solid var(--border);padding:5rem 2rem 4rem;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:0;right:0;width:55%;height:100%;background:radial-gradient(ellipse at 75% 40%,rgba(216,90,48,.06) 0%,transparent 65%);pointer-events:none}
+  .hero-inner{max-width:760px;margin:0 auto;position:relative}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-700);background:var(--coral-50);padding:5px 12px;border-radius:20px;margin-bottom:1.5rem}
+  .hero h1{font-family:'Lora',Georgia,serif;font-size:clamp(2rem,5vw,3rem);font-weight:600;line-height:1.2;color:var(--slate);margin-bottom:1.25rem;letter-spacing:-.01em}
+  .hero h1 em{font-style:italic;color:var(--coral-600)}
+  .hero-lead{font-size:16px;color:var(--slate-60);max-width:580px;line-height:1.75;margin-bottom:2rem}
+  .hero-stats{display:flex;gap:2rem;flex-wrap:wrap}
+  .stat{display:flex;flex-direction:column;gap:3px}
+  .stat-num{font-size:22px;font-weight:600;color:var(--slate);font-family:'Lora',serif}
+  .stat-label{font-size:12px;color:var(--slate-40);text-transform:uppercase;letter-spacing:.07em;font-weight:500}
+
+  /* PAGE */
+  .page{max-width:880px;margin:0 auto;padding:3rem 2rem 5rem}
+
+  /* SECTION */
+  .section-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+  .section-head h2{font-family:'Lora',serif;font-size:1.35rem;font-weight:600;color:var(--slate)}
+  .badge{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:4px;white-space:nowrap}
+  .badge-coral{background:var(--coral-50);color:var(--coral-700)}
+  .badge-teal{background:var(--teal-50);color:var(--teal-700)}
+  .badge-purple{background:var(--purple-50);color:var(--purple-700)}
+  .badge-amber{background:var(--amber-50);color:var(--amber-700)}
+  .badge-blue{background:var(--blue-50);color:var(--blue-700)}
+  .badge-green{background:var(--green-50);color:var(--green-700)}
+  .badge-pink{background:var(--pink-50);color:var(--pink-700)}
+
+  /* TWO-ARM SPLIT */
+  .arms{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:2.5rem}
+  .arm{background:var(--white);padding:1.5rem}
+  .arm-label{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:.6rem}
+  .arm-coral{color:var(--coral-700)}
+  .arm-teal{color:var(--teal-700)}
+  .arm h3{font-size:15px;font-weight:600;margin-bottom:.4rem}
+  .arm p{font-size:13px;color:var(--slate-60);line-height:1.65}
+  .arm-examples{display:flex;flex-wrap:wrap;gap:6px;margin-top:.75rem}
+  .ex-pill{font-size:12px;padding:3px 9px;border-radius:20px;font-weight:500}
+  .ex-coral{background:var(--coral-50);color:var(--coral-700)}
+  .ex-teal{background:var(--teal-50);color:var(--teal-700)}
+
+  /* TABLES */
+  .btable-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--white);margin-bottom:2.5rem}
+  .btable{width:100%;border-collapse:collapse}
+  .btable thead tr{background:var(--slate-5)}
+  .btable th{text-align:left;padding:10px 16px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-40);border-bottom:1px solid var(--border)}
+  .btable td{padding:13px 16px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.65}
+  .btable tr:last-child td{border-bottom:none}
+  .btable td:first-child{font-weight:600;color:var(--slate);width:160px;white-space:nowrap}
+  .btable td:last-child{color:var(--slate-60)}
+  .btable tr:hover td{background:var(--slate-5)}
+
+  /* HIGHLIGHT */
+  .hl{border-left:3px solid var(--coral-400);border-radius:0 10px 10px 0;padding:1.1rem 1.4rem;margin:1.25rem 0;background:var(--coral-50)}
+  .hl h3{font-family:'Lora',serif;font-size:15px;font-weight:600;color:var(--coral-900);margin-bottom:.35rem}
+  .hl p{font-size:14px;color:var(--coral-700);line-height:1.7}
+  .hl-teal{border-left-color:var(--teal-400);background:var(--teal-50)}
+  .hl-teal h3{color:var(--teal-900)}
+  .hl-teal p{color:var(--teal-700)}
+  .hl-purple{border-left-color:var(--purple-400);background:var(--purple-50)}
+  .hl-purple h3{color:var(--purple-900)}
+  .hl-purple p{color:var(--purple-700)}
+  .hl-blue{border-left-color:var(--blue-400);background:var(--blue-50)}
+  .hl-blue h3{color:var(--blue-700)}
+  .hl-blue p{color:var(--blue-700)}
+  .hl-amber{border-left-color:var(--amber-400);background:var(--amber-50)}
+  .hl-amber h3{color:var(--amber-700)}
+  .hl-amber p{color:var(--amber-700)}
+
+  /* STEPS */
+  .steps{display:flex;flex-direction:column;gap:0;margin-bottom:2rem}
+  .step{display:flex;gap:1rem;align-items:flex-start;padding:1.1rem 1.25rem;background:var(--white);border:1px solid var(--border);border-bottom:none;position:relative}
+  .step:first-child{border-radius:12px 12px 0 0}
+  .step:last-child{border-radius:0 0 12px 12px;border-bottom:1px solid var(--border)}
+  .step-num{min-width:28px;height:28px;border-radius:50%;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+  .sn-coral{background:var(--coral-50);color:var(--coral-700)}
+  .sn-teal{background:var(--teal-50);color:var(--teal-700)}
+  .step h3{font-size:14px;font-weight:600;margin-bottom:.2rem;color:var(--slate)}
+  .step p{font-size:13px;color:var(--slate-60);line-height:1.6}
+
+  /* MHC CARDS */
+  .mhc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem}
+  .mhc-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+  .mhc-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:4px;margin-bottom:.6rem}
+  .mt-coral{background:var(--coral-50);color:var(--coral-700)}
+  .mt-teal{background:var(--teal-50);color:var(--teal-700)}
+  .mhc-card h3{font-size:14px;font-weight:600;margin-bottom:.35rem}
+  .mhc-card p{font-size:13px;color:var(--slate-60);line-height:1.65}
+
+  /* T CELL GRID */
+  .tcell-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:2.5rem}
+  .tcell{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+  .tcell-icon{font-size:22px;margin-bottom:.5rem;display:block}
+  .tcell h3{font-size:14px;font-weight:600;margin-bottom:.35rem}
+  .tcell p{font-size:13px;color:var(--slate-60);line-height:1.65}
+
+  /* ANTIBODY FUNCTIONS */
+  .ab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem}
+  .ab-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1rem}
+  .ab-icon{font-size:20px;margin-bottom:.4rem;display:block}
+  .ab-card h3{font-size:13px;font-weight:600;margin-bottom:.25rem}
+  .ab-card p{font-size:12px;color:var(--slate-60);line-height:1.5}
+
+  /* PRIMARY VS SECONDARY */
+  .pvsec{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2.5rem}
+  .pvsec-card{border-radius:14px;padding:1.5rem;border:1px solid var(--border)}
+  .pvsec-card.primary{background:var(--white)}
+  .pvsec-card.secondary{background:var(--teal-50);border-color:var(--teal-100)}
+  .pvsec-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+  .pl-grey{color:var(--slate-40)}
+  .pl-teal{color:var(--teal-700)}
+  .pvsec-card h3{font-size:16px;font-weight:600;margin-bottom:.5rem}
+  .pvsec-card.secondary h3{color:var(--teal-900)}
+  .pvsec-card ul{padding-left:1.1rem;font-size:13px;color:var(--slate-60);line-height:1.75}
+  .pvsec-card.secondary ul{color:var(--teal-700)}
+
+  /* CHART */
+  .chart-wrap{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.5rem 1.5rem 1rem;margin-bottom:2.5rem}
+  .chart-title{font-size:13px;font-weight:500;color:var(--slate-60);margin-bottom:1rem;text-align:center}
+  .chart-svg{width:100%;display:block}
+
+  /* IMMUNITY TABLE */
+  .imm-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:2.5rem}
+  .imm-card{background:var(--white);padding:1.4rem 1.5rem}
+  .imm-type{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+  .it-natact{color:var(--teal-700)}
+  .it-artact{color:var(--blue-700)}
+  .it-natpas{color:var(--amber-700)}
+  .it-artpas{color:var(--coral-700)}
+  .imm-card h3{font-size:14px;font-weight:600;margin-bottom:.4rem}
+  .imm-card p{font-size:13px;color:var(--slate-60);line-height:1.65}
+  .imm-example{margin-top:.65rem;font-size:12px;font-style:italic;color:var(--slate-40)}
+
+  /* AXIS LABELS */
+  .axis-label{font-size:11px;fill:var(--slate-40);font-family:'Inter',sans-serif}
+
+  /* TABS */
+  .tab-bar{display:flex;gap:4px;margin-bottom:1.5rem;background:var(--slate-10);padding:4px;border-radius:10px;width:fit-content}
+  .tab-btn{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:7px 16px;border-radius:7px;border:none;background:transparent;color:var(--slate-40);cursor:pointer;transition:all .15s}
+  .tab-btn.active{background:var(--white);color:var(--slate);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+
+  /* TAKEAWAY */
+  .takeaway{background:var(--slate);border-radius:16px;padding:2.5rem;margin-top:3rem;display:flex;gap:1.5rem;align-items:flex-start}
+  .takeaway-icon{width:44px;height:44px;flex-shrink:0;background:rgba(255,255,255,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .takeaway h2{font-family:'Lora',serif;font-size:1.1rem;font-weight:600;color:var(--white);margin-bottom:.5rem}
+  .takeaway p{font-size:14px;color:rgba(255,255,255,.65);line-height:1.75}
+  .takeaway strong{color:var(--coral-100);font-weight:500}
+
+  .mt-3{margin-top:3rem}
+  .mb-15{margin-bottom:1.5rem}
+  footer{text-align:center;padding:2rem;font-size:12px;color:var(--slate-40);border-top:1px solid var(--border)}
+
+  @media(max-width:640px){
+    .arms,.mhc-grid,.tcell-grid,.pvsec,.imm-grid{grid-template-columns:1fr}
+    .ab-grid{grid-template-columns:repeat(2,1fr)}
+    .btable td:first-child{white-space:normal;width:auto}
+    .hero h1{font-size:1.8rem}
+    .takeaway{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-dot"></div>
+    <span class="nav-label">Topic 2 · Infectious Disease</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#lymphatic">Lymphatic</a></li>
+    <li><a href="#tcells">T cells</a></li>
+    <li><a href="#bcells">B cells</a></li>
+    <li><a href="#immunity">Immunity types</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">2.8 &nbsp;·&nbsp; Third Line of Defence</div>
+    <h1>A targeted, <em>remembered</em><br>immune response</h1>
+    <p class="hero-lead">The adaptive immune system is the body's precision weapon — specific to each pathogen, and capable of learning from past encounters to respond faster and stronger the next time.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">2</span><span class="stat-label">Response arms</span></div>
+      <div class="stat"><span class="stat-num">Billions</span><span class="stat-label">Unique B &amp; T cells</span></div>
+      <div class="stat"><span class="stat-num">2,000</span><span class="stat-label">Antibodies/sec per plasma cell</span></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Types of immunity</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="section-head">
+      <h2>Two arms of adaptive immunity</h2>
+      <span class="badge badge-coral">Specific · Acquired</span>
+    </div>
+    <div class="arms">
+      <div class="arm">
+        <div class="arm-label arm-coral">Cell-mediated response</div>
+        <h3>T cells target infected cells</h3>
+        <p>Targets pathogens that exist <strong>intracellularly</strong> — inside host cells. T cells recognise and destroy infected or abnormal host cells directly.</p>
+        <div class="arm-examples">
+          <span class="ex-pill ex-coral">Viruses</span>
+          <span class="ex-pill ex-coral">Some bacteria</span>
+          <span class="ex-pill ex-coral">Cancerous cells</span>
+        </div>
+      </div>
+      <div class="arm">
+        <div class="arm-label arm-teal">Humoral response</div>
+        <h3>B cells produce antibodies</h3>
+        <p>Targets pathogens in <strong>extracellular spaces</strong> — blood and lymph. B cells differentiate into plasma cells that secrete antibodies to neutralise pathogens.</p>
+        <div class="arm-examples">
+          <span class="ex-pill ex-teal">Most bacteria</span>
+          <span class="ex-pill ex-teal">Fungi</span>
+          <span class="ex-pill ex-teal">Parasites</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MHC -->
+    <div class="section-head">
+      <h2>MHC proteins — identifying self vs non-self</h2>
+      <span class="badge badge-amber">Key mechanism</span>
+    </div>
+    <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.25rem;line-height:1.7">Major histocompatibility complex (MHC) proteins are cell-surface markers that present antigen fragments for specific recognition by T cells — unlike the general pattern recognition of the innate system.</p>
+    <div class="mhc-grid">
+      <div class="mhc-card">
+        <span class="mhc-tag mt-coral">MHC Class I</span>
+        <h3>On nearly all nucleated cells</h3>
+        <p>Presents peptide fragments from <strong>intracellular proteins</strong>. Healthy cells display normal self peptides. Infected or abnormal cells display foreign/altered peptides — signalling cytotoxic T cells to destroy them.</p>
+      </div>
+      <div class="mhc-card">
+        <span class="mhc-tag mt-teal">MHC Class II</span>
+        <h3>On antigen-presenting cells only</h3>
+        <p>Expressed primarily on APCs (dendritic cells, macrophages). Presents peptides from <strong>extracellular pathogens</strong> to T-helper cells, activating the full adaptive immune response.</p>
+      </div>
+    </div>
+
+    <div class="hl hl-amber">
+      <h3>Antigen-presenting cells (APCs) — bridging innate and adaptive</h3>
+      <p>Dendritic cells and macrophages detect, engulf, and digest pathogens as part of the innate response. They then display digested antigen fragments on their surface via MHC Class II proteins. T-helper cells recognise this displayed antigen and are activated — triggering the full adaptive immune cascade.</p>
+    </div>
+  </section>
+
+  <!-- LYMPHATIC SYSTEM -->
+  <section id="lymphatic" class="mt-3">
+    <div class="section-head">
+      <h2>The lymphatic system</h2>
+      <span class="badge badge-blue">Infrastructure</span>
+    </div>
+    <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.25rem;line-height:1.7">A network of vessels, nodes, and specialised organs that circulates lymph — a fluid containing lymphocytes — and filters it to remove pathogens, cellular debris, and foreign particles.</p>
+    <div class="btable-wrap">
+      <table class="btable">
+        <thead><tr><th>Organ / structure</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td>Bone marrow</td><td>Primary lymphoid organ. Site where all leukocytes (including B cells and T cells) originate from stem cells. B cells mature here.</td></tr>
+          <tr><td>Thymus gland</td><td>Primary lymphoid organ. T cells migrate here from the bone marrow to mature and become immunocompetent.</td></tr>
+          <tr><td>Lymph nodes</td><td>Secondary lymphoid organs scattered throughout the body. Filter lymph and house immune cells — sites for activating lymphocytes when antigens are detected.</td></tr>
+          <tr><td>Spleen</td><td>Filters blood, removes old red blood cells, and provides a site for immune cell activation and T-lymphocyte contact.</td></tr>
+          <tr><td>Tonsils &amp; adenoids</td><td>Trap pathogens entering through the mouth and nose, providing a first contact point for immune cells in the respiratory tract.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- T CELLS -->
+  <section id="tcells">
+    <div class="section-head">
+      <h2>T lymphocytes &amp; cell-mediated immunity</h2>
+      <span class="badge badge-coral">Cell-mediated response</span>
+    </div>
+    <div class="hl">
+      <h3>How the cell-mediated response begins</h3>
+      <p>Every individual has billions of unique T-helper cells, each capable of binding to a different specific antigen. This means there is theoretically a T-helper cell for every possible pathogen. These cells wait in the lymphatic system until an APC presents their matching antigen via MHC Class II — then they are activated.</p>
+    </div>
+
+    <div class="section-head" style="margin-top:2rem">
+      <h2>The four types of T cell</h2>
+    </div>
+    <div class="tcell-grid">
+      <div class="tcell">
+        <span class="tcell-icon">🤝</span>
+        <h3>T-helper cells</h3>
+        <p>The bridge between innate and adaptive responses. Activated by APCs presenting a specific antigen. They then activate T-cytotoxic cells and B cells by secreting cytokines, and can also migrate to the site of infection directly.</p>
+      </div>
+      <div class="tcell">
+        <span class="tcell-icon">⚔️</span>
+        <h3>T-cytotoxic cells (T-killer cells)</h3>
+        <p>Directly kill infected, cancerous, or abnormal host cells. They recognise non-self antigen fragments presented on MHC Class I molecules and secrete chemicals that induce <em>apoptosis</em> — a clean, controlled cell death.</p>
+      </div>
+      <div class="tcell">
+        <span class="tcell-icon">🧠</span>
+        <h3>T-memory cells</h3>
+        <p>Long-lived T cells that remember specific pathogens previously encountered. Upon re-exposure, they rapidly activate and mount a faster, stronger secondary immune response — the basis of long-term specific immunity.</p>
+      </div>
+      <div class="tcell">
+        <span class="tcell-icon">⚖️</span>
+        <h3>T-suppressor cells (regulatory T cells)</h3>
+        <p>Mature in the thymus. Downregulate immune responses once the infection is cleared to prevent excessive activation and autoimmune diseases, where the immune system mistakenly attacks self cells.</p>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Sequence of events — cell-mediated response</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num sn-coral">1</div><div><h3>APC presents antigen</h3><p>A dendritic cell or macrophage engulfs a pathogen, digests it, and presents antigen fragments on MHC Class II proteins at its surface.</p></div></div>
+      <div class="step"><div class="step-num sn-coral">2</div><div><h3>T-helper cell activated</h3><p>The APC locates the unique T-helper cell among billions in the lymphatic system with the matching receptor. This takes time — contributing to the delay of the primary response.</p></div></div>
+      <div class="step"><div class="step-num sn-coral">3</div><div><h3>Clonal expansion</h3><p>The activated T-helper cell divides rapidly into thousands of identical copies, amplifying the response.</p></div></div>
+      <div class="step"><div class="step-num sn-coral">4</div><div><h3>Differentiation</h3><p>Copies differentiate into: T-cytotoxic cells (kill infected cells), cells that migrate to the infection site, cells that secrete cytokines to activate B cells, and T-memory cells for future protection.</p></div></div>
+      <div class="step"><div class="step-num sn-coral">5</div><div><h3>T-cytotoxic cells destroy infected cells</h3><p>T-cytotoxic cells recognise non-self antigens on infected host cells (via MHC Class I) and induce apoptosis, eliminating the pathogen's replication factory.</p></div></div>
+    </div>
+  </section>
+
+  <!-- B CELLS -->
+  <section id="bcells" class="mt-3">
+    <div class="section-head">
+      <h2>B lymphocytes &amp; humoral immunity</h2>
+      <span class="badge badge-teal">Humoral response</span>
+    </div>
+    <div class="hl hl-teal">
+      <h3>What is humoral immunity?</h3>
+      <p>Humoral immunity targets extracellular pathogens — those found in the blood and lymph. Like T-helper cells, every individual has billions of unique B cells, each capable of recognising a different antigen. Once activated, B cells differentiate into plasma cells that secrete specific antibodies at up to 2,000 per second.</p>
+    </div>
+
+    <div class="section-head" style="margin-top:2rem"><h2>How B cells are activated</h2></div>
+    <div class="steps">
+      <div class="step"><div class="step-num sn-teal">1</div><div><h3>Antigen recognition</h3><p>B cells can be activated by directly recognising specific antigens via surface antibodies, by antigens presented by T-helper cells, or by cytokines secreted by T-helper cells.</p></div></div>
+      <div class="step"><div class="step-num sn-teal">2</div><div><h3>Clonal expansion</h3><p>The activated B cell differentiates and divides until thousands of identical copies exist.</p></div></div>
+      <div class="step"><div class="step-num sn-teal">3</div><div><h3>Plasma cell secretion</h3><p>Copies differentiate into B-plasma cells that migrate to the site of infection and secrete approximately 2,000 antibodies per second into the bloodstream.</p></div></div>
+      <div class="step"><div class="step-num sn-teal">4</div><div><h3>Memory formation</h3><p>Some activated B cells become B-memory cells, persisting in the body to enable a faster, stronger secondary response upon future exposure to the same antigen.</p></div></div>
+    </div>
+
+    <!-- ANTIBODIES -->
+    <div class="section-head"><h2>Antibodies</h2><span class="badge badge-teal">Y-shaped proteins</span></div>
+    <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.25rem;line-height:1.7">Y-shaped proteins produced by B-plasma cells. Each antibody is specific to one antigen. They bind to antigens on pathogens, toxins, pollen, blood cell surface molecules, and proteins on transplanted tissues.</p>
+    <div class="ab-grid">
+      <div class="ab-card"><span class="ab-icon">🚫</span><h3>Neutralisation</h3><p>Block pathogens and toxins from infecting or damaging cells.</p></div>
+      <div class="ab-card"><span class="ab-icon">🧪</span><h3>Anti-toxin</h3><p>Bind to harmful toxins, rendering them harmless before they can cause damage.</p></div>
+      <div class="ab-card"><span class="ab-icon">🏷️</span><h3>Opsonisation</h3><p>Mark pathogens for easier identification and engulfment by phagocytes.</p></div>
+      <div class="ab-card"><span class="ab-icon">⛓️</span><h3>Immobilisation</h3><p>Bind to bacterial flagella, stopping bacteria from moving and spreading.</p></div>
+      <div class="ab-card"><span class="ab-icon">🍇</span><h3>Agglutination</h3><p>Clump pathogens together, making them easier for phagocytes to engulf in bulk.</p></div>
+      <div class="ab-card"><span class="ab-icon">💥</span><h3>Complement activation</h3><p>In some cases, assist in activating the complement system, causing pore formation and pathogen lysis.</p></div>
+    </div>
+
+    <!-- PRIMARY VS SECONDARY -->
+    <div class="section-head"><h2>Primary vs secondary immune response</h2><span class="badge badge-purple">Memory</span></div>
+    <div class="pvsec">
+      <div class="pvsec-card primary">
+        <div class="pvsec-label pl-grey">First encounter</div>
+        <h3>Primary response</h3>
+        <ul>
+          <li>Slower — takes days to weeks</li>
+          <li>APC must locate unique T cell among billions</li>
+          <li>Lower antibody levels initially</li>
+          <li>Less specific early on</li>
+          <li>Creates memory T and B cells as a byproduct</li>
+        </ul>
+      </div>
+      <div class="pvsec-card secondary">
+        <div class="pvsec-label pl-teal">Re-exposure</div>
+        <h3>Secondary response</h3>
+        <ul>
+          <li>Much faster — memory cells already exist</li>
+          <li>Stronger — more antibodies produced</li>
+          <li>More specific — honed to the pathogen</li>
+          <li>Pathogen often eliminated before symptoms appear</li>
+          <li>Basis of vaccine-conferred immunity</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart-wrap">
+      <div class="chart-title">Antibody concentration over time — primary vs secondary response (schematic)</div>
+      <svg class="chart-svg" viewBox="0 0 580 220" xmlns="http://www.w3.org/2000/svg">
+        <!-- axes -->
+        <line x1="60" y1="15" x2="60" y2="185" stroke="#EAEBEC" stroke-width="1.5"/>
+        <line x1="60" y1="185" x2="555" y2="185" stroke="#EAEBEC" stroke-width="1.5"/>
+        <!-- grid -->
+        <line x1="60" y1="145" x2="555" y2="145" stroke="#F0F1F3" stroke-width="1"/>
+        <line x1="60" y1="105" x2="555" y2="105" stroke="#F0F1F3" stroke-width="1"/>
+        <line x1="60" y1="65" x2="555" y2="65" stroke="#F0F1F3" stroke-width="1"/>
+        <line x1="60" y1="25" x2="555" y2="25" stroke="#F0F1F3" stroke-width="1"/>
+        <!-- axis labels -->
+        <text x="30" y="190" class="axis-label" text-anchor="middle">0</text>
+        <text x="30" y="150" class="axis-label" text-anchor="middle">Low</text>
+        <text x="30" y="70" class="axis-label" text-anchor="middle">High</text>
+        <text x="307" y="210" class="axis-label" text-anchor="middle">Time (days)</text>
+        <text x="15" y="110" class="axis-label" text-anchor="middle" transform="rotate(-90,15,110)">Antibody level</text>
+        <!-- exposure lines -->
+        <line x1="140" y1="15" x2="140" y2="185" stroke="#EAEBEC" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="330" y1="15" x2="330" y2="185" stroke="#EAEBEC" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="140" y="10" class="axis-label" text-anchor="middle" style="fill:#7A7F8A">Antigen A (1st)</text>
+        <text x="330" y="10" class="axis-label" text-anchor="middle" style="fill:#7A7F8A">Antigen A (2nd)</text>
+        <!-- PRIMARY CURVE — coral, slow rise, moderate peak, slow fall -->
+        <path d="M60,185 C80,185 120,185 140,185 C160,185 175,160 190,140 C205,120 215,100 230,105 C245,110 260,130 290,148 C310,158 325,162 330,163" stroke="#D85A30" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- SECONDARY CURVE — teal, fast sharp rise, high peak, moderate fall -->
+        <path d="M330,163 C345,155 355,120 365,60 C375,20 385,20 395,22 C410,25 430,45 450,70 C470,95 490,125 520,148 C535,158 545,162 555,165" stroke="#1D9E75" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Legend -->
+        <rect x="390" y="185" width="14" height="3" rx="1.5" fill="#D85A30"/>
+        <text x="408" y="190" class="axis-label">Primary</text>
+        <rect x="460" y="185" width="14" height="3" rx="1.5" fill="#1D9E75"/>
+        <text x="478" y="190" class="axis-label">Secondary</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- IMMUNITY TYPES -->
+  <section id="immunity" class="mt-3">
+    <div class="section-head">
+      <h2>Types of immunity</h2>
+      <span class="badge badge-purple">Active vs passive</span>
+    </div>
+    <p style="font-size:14px;color:var(--slate-60);margin-bottom:1.5rem;line-height:1.7">Immunity is classified by how it is acquired — whether the individual's own adaptive immune system generates the protection (<strong>active</strong>), or whether ready-made antibodies are received from another source (<strong>passive</strong>); and whether the route was natural or artificial.</p>
+    <div class="imm-grid">
+      <div class="imm-card">
+        <div class="imm-type it-natact">Natural + Active</div>
+        <h3>Natural active immunity</h3>
+        <p>The body produces its own immune response after natural exposure to a pathogen. Memory cells develop, providing long-term protection.</p>
+        <div class="imm-example">e.g. Recovering from influenza — immunity develops, memory cells persist</div>
+      </div>
+      <div class="imm-card">
+        <div class="imm-type it-artact">Artificial + Active</div>
+        <h3>Artificial active immunity</h3>
+        <p>The body produces an immune response after exposure to antigens via vaccination. Stimulates memory cell formation without causing disease.</p>
+        <div class="imm-example">e.g. MMR vaccine stimulates immune response without infection</div>
+      </div>
+      <div class="imm-card">
+        <div class="imm-type it-natpas">Natural + Passive</div>
+        <h3>Natural passive immunity</h3>
+        <p>Antibodies are transferred from one individual to another naturally — the recipient's immune system does not produce them. Short-term protection only.</p>
+        <div class="imm-example">e.g. Maternal antibodies passed through placenta or breast milk</div>
+      </div>
+      <div class="imm-card">
+        <div class="imm-type it-artpas">Artificial + Passive</div>
+        <h3>Artificial passive immunity</h3>
+        <p>Pre-made antibodies are injected into a person to provide immediate but short-term protection. No memory cells are formed.</p>
+        <div class="imm-example">e.g. Antivenom for snake bites; rabies antibody treatment</div>
+      </div>
+    </div>
+
+    <div class="hl hl-purple">
+      <h3>Active vs passive — the key difference</h3>
+      <p>Active immunity (natural or artificial) always involves the individual's own adaptive immune system generating memory cells — giving long-term protection. Passive immunity provides instant but temporary protection because no memory cells are formed; antibodies are eventually broken down and not replenished.</p>
+    </div>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway">
+    <div class="takeaway-icon">🔑</div>
+    <div>
+      <h2>The key principle</h2>
+      <p>The adaptive immune system's power lies in its <strong>specificity and memory</strong>. Billions of unique B and T cells ensure the body can respond to virtually any pathogen. The primary response is slow — but it builds memory cells. Every subsequent exposure triggers a <strong>secondary response</strong> that is faster, stronger, and more targeted — which is precisely why vaccines work.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Topic 2.8 · Third Line of Defence &nbsp;·&nbsp; © Essentials Education 2025 &nbsp;·&nbsp; Biology Stage 2
+</footer>
+
+<script>
+  function showTab(name,btn){
+    document.querySelectorAll('.tab-panel').forEach(el=>el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+    document.getElementById('tab-'+name).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
