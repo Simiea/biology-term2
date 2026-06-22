@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yr 11 Bio Revision</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --accent: #58d68d;
+    --accent2: #3498db;
+    --accent3: #e74c3c;
+    --accent4: #f39c12;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  nav .logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+    margin-right: 12px;
+  }
+  nav button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  nav button:hover, nav button.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+
+  /* PAGES */
+  .page { display: none; padding: 28px 24px; max-width: 960px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* HOME */
+  .home-hero {
+    text-align: center;
+    padding: 48px 0 32px;
+  }
+  .home-hero .tag {
+    display: inline-block;
+    background: rgba(88,214,141,0.12);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .home-hero h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+  .home-hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .topic-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(88,214,141,0.08);
+  }
+  .topic-card .icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .topic-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+  .topic-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+  .topic-card .pill {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+  .pill.green { background: rgba(88,214,141,0.15); color: var(--accent); }
+  .pill.blue { background: rgba(52,152,219,0.15); color: var(--accent2); }
+  .pill.red { background: rgba(231,76,60,0.15); color: var(--accent3); }
+  .pill.yellow { background: rgba(243,156,18,0.15); color: var(--accent4); }
+
+  /* INFO SECTIONS */
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+
+  .info-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+  .info-block h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .info-block h3 .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot.green { background: var(--accent); }
+  .dot.blue { background: var(--accent2); }
+  .dot.red { background: var(--accent3); }
+  .dot.yellow { background: var(--accent4); }
+
+  .info-block p, .info-block li {
+    font-size: 0.9rem;
+    color: #c9d1d9;
+    line-height: 1.7;
+  }
+  .info-block ul { padding-left: 20px; }
+  .info-block li { margin-bottom: 4px; }
+  .info-block .highlight {
+    display: inline;
+    background: rgba(88,214,141,0.12);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85em;
+  }
+  .info-block .highlight.blue {
+    background: rgba(52,152,219,0.12);
+    color: var(--accent2);
+  }
+  .info-block .highlight.red {
+    background: rgba(231,76,60,0.12);
+    color: var(--accent3);
+  }
+  .info-block .highlight.yellow {
+    background: rgba(243,156,18,0.12);
+    color: var(--accent4);
+  }
+
+  .defence-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 10px;
+  }
+  .defence-table th {
+    background: var(--surface2);
+    padding: 8px 12px;
+    text-align: left;
+    color: var(--muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+  }
+  .defence-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: #c9d1d9;
+    vertical-align: top;
+  }
+  .defence-table tr:last-child td { border-bottom: none; }
+
+  /* FLASHCARDS */
+  #flashcards-page .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  #flashcards-page .controls select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  #flashcards-page .controls button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  #flashcards-page .controls button:hover { border-color: var(--accent); color: var(--accent); }
+
+  .fc-progress {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .flashcard-wrap {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto 24px;
+    height: 260px;
+    cursor: pointer;
+  }
+  .flashcard {
+    position: relative;
+    width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .fc-front {
+    background: var(--surface);
+  }
+  .fc-back {
+    background: linear-gradient(135deg, #0d2b1f 0%, #0d1117 100%);
+    border-color: var(--accent);
+    transform: rotateY(180deg);
+  }
+  .fc-face .label {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-family: 'DM Mono', monospace;
+  }
+  .fc-face .label.answer { color: var(--accent); }
+  .fc-face .question-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .fc-face .answer-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #c9d1d9;
+  }
+  .fc-face .tap-hint {
+    position: absolute;
+    bottom: 14px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .fc-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .fc-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .fc-btn.wrong { background: rgba(231,76,60,0.1); color: var(--accent3); border-color: rgba(231,76,60,0.3); }
+  .fc-btn.wrong:hover { background: rgba(231,76,60,0.2); }
+  .fc-btn.almost { background: rgba(243,156,18,0.1); color: var(--accent4); border-color: rgba(243,156,18,0.3); }
+  .fc-btn.almost:hover { background: rgba(243,156,18,0.2); }
+  .fc-btn.right { background: rgba(88,214,141,0.1); color: var(--accent); border-color: rgba(88,214,141,0.3); }
+  .fc-btn.right:hover { background: rgba(88,214,141,0.2); }
+  .fc-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .fc-category-label {
+    font-size: 0.72rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .done-state {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .done-state .big { font-size: 3rem; margin-bottom: 16px; }
+  .done-state h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+  .done-state p { color: var(--muted); margin-bottom: 24px; }
+  .done-state .score-breakdown {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .score-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    min-width: 80px;
+  }
+  .score-box .num { font-size: 1.6rem; font-weight: 700; }
+  .score-box .lbl { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .score-box.green .num { color: var(--accent); }
+  .score-box.yellow .num { color: var(--accent4); }
+  .score-box.red .num { color: var(--accent3); }
+  .restart-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">🧬 Bio Revision</span>
+  <button class="active" onclick="showPage('home')">Home</button>
+  <button onclick="showPage('pathogens')">Pathogens</button>
+  <button onclick="showPage('immunity')">Immunity</button>
+  <button onclick="showPage('bacteria-lab')">Bacteria & Lab</button>
+  <button onclick="showPage('disease-spread')">Disease & Spread</button>
+  <button onclick="showPage('flashcards')">⚡ Flashcards</button>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="home-hero">
+    <div class="tag">Year 11 Biology</div>
+    <h1>Exam Revision Hub</h1>
+    <p>Everything you need for your biology exam — info summaries and flashcards built from your past paper and study helpers.</p>
+  </div>
+
+  <div class="section-title" style="font-size:1rem; color:var(--muted); font-weight:500; margin-bottom:14px;">TOPICS TO STUDY</div>
+  <div class="topic-grid">
+    <div class="topic-card" onclick="showPage('pathogens')">
+      <div class="icon">🦠</div>
+      <h3>Types of Pathogens</h3>
+      <p>Bacteria, viruses, fungi, protozoa, parasites — differences, sizes, and treatments</p>
+      <span class="pill green">Core topic</span>
+    </div>
+    <div class="topic-card" onclick="showPage('immunity')">
+      <div class="icon">🛡️</div>
+      <h3>Immune System</h3>
+      <p>Three lines of defence, innate vs adaptive, phagocytes, antibodies, vaccines, herd immunity</p>
+      <span class="pill green">Core topic</span>
+    </div>
+    <div class="topic-card" onclick="showPage('bacteria-lab')">
+      <div class="icon">🔬</div>
+      <h3>Bacteria & Lab Skills</h3>
+      <p>Zone of inhibition, biofilms, pili, antibiotic sensitivity experiments</p>
+      <span class="pill blue">Exam helper</span>
+    </div>
+    <div class="topic-card" onclick="showPage('disease-spread')">
+      <div class="icon">🌍</div>
+      <h3>Disease & Spread</h3>
+      <p>Transmission types, epidemic vs pandemic, Malaria, Chlamydia, antibiotic resistance</p>
+      <span class="pill yellow">Key concepts</span>
+    </div>
+    <div class="topic-card" onclick="showPage('flashcards')">
+      <div class="icon">⚡</div>
+      <h3>Flashcard Quiz</h3>
+      <p>Test yourself with 40+ flashcards drawn from the actual exam questions</p>
+      <span class="pill red">Practice</span>
+    </div>
+  </div>
+</div>
+
+<!-- PATHOGENS PAGE -->
+<div id="pathogens" class="page">
+  <div class="section-title">🦠 Types of Pathogens</div>
+  <div class="section-sub">Know the differences, sizes, and how each is treated — this comes up in MCQs and short answers.</div>
+
+  <div class="info-block">
+    <h3><span class="dot green"></span>What is a Pathogen?</h3>
+    <p>A <span class="highlight">pathogen</span> is any disease-causing microorganism. The main types you need to know are: <strong>bacteria, viruses, fungi, protozoa,</strong> and <strong>visible parasites</strong>.</p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot blue"></span>Pathogen Size (smallest → largest)</h3>
+    <p style="margin-bottom:10px;">A key MCQ question! Order from smallest to largest:</p>
+    <p><span class="highlight">Virus</span> → <span class="highlight">Bacterium</span> → <span class="highlight">Protozoan</span> → <span class="highlight">Visible Parasite</span></p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot yellow"></span>Each Pathogen — What You Must Know</h3>
+    <table class="defence-table">
+      <tr><th>Pathogen</th><th>Type of cell</th><th>Needs host to reproduce?</th><th>Treatment</th><th>Example diseases</th></tr>
+      <tr><td><strong>Virus</strong></td><td>Non-cellular</td><td>✅ Yes — cannot reproduce alone</td><td>Vaccines; antivirals (no antibiotics)</td><td>Influenza, COVID-19, Measles</td></tr>
+      <tr><td><strong>Bacteria</strong></td><td>Prokaryote</td><td>❌ No</td><td><strong>Antibiotics</strong></td><td>Chlamydia, TB, Strep</td></tr>
+      <tr><td><strong>Fungi</strong></td><td>Eukaryote</td><td>❌ No</td><td>Antifungal drugs</td><td>Tinea, Thrush</td></tr>
+      <tr><td><strong>Protozoa</strong></td><td>Unicellular eukaryote</td><td>Depends</td><td>Antiparasitic drugs</td><td>Malaria, Yellow Fever</td></tr>
+      <tr><td><strong>Visible Parasite</strong></td><td>Multicellular</td><td>❌ No</td><td>Antiparasitic drugs</td><td>Tapeworm, Lice</td></tr>
+    </table>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot red"></span>Infectious vs Non-Infectious Disease</h3>
+    <ul>
+      <li><span class="highlight">Infectious</span> — caused by a pathogen, can spread person to person (e.g. Influenza, Malaria, Chlamydia)</li>
+      <li><span class="highlight red">Non-Infectious</span> — NOT caused by a pathogen, cannot spread (e.g. Cancer, Emphysema, Allergies, Type 2 Diabetes)</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot green"></span>What is a Disease?</h3>
+    <p>A disease is a condition that disrupts the normal functioning of the body. It has a specific set of signs and symptoms, and may be caused by pathogens, genetics, environment, or lifestyle factors.</p>
+  </div>
+</div>
+
+<!-- IMMUNITY PAGE -->
+<div id="immunity" class="page">
+  <div class="section-title">🛡️ The Immune System</div>
+  <div class="section-sub">Three lines of defence — know each level, what's in it, and innate vs adaptive. Very high exam value.</div>
+
+  <div class="info-block">
+    <h3><span class="dot green"></span>Three Lines of Defence</h3>
+    <table class="defence-table">
+      <tr><th>Line</th><th>Type</th><th>Components</th></tr>
+      <tr>
+        <td><strong>1st Line</strong></td>
+        <td>Innate (physical & chemical barriers)</td>
+        <td>Skin, mucus, cilia, stomach acid, sweat & sebum oil, tears, coughing/sneezing, eyelashes</td>
+      </tr>
+      <tr>
+        <td><strong>2nd Line</strong></td>
+        <td>Innate (internal response)</td>
+        <td>Phagocytes (neutrophils, macrophages), inflammation, fever</td>
+      </tr>
+      <tr>
+        <td><strong>3rd Line</strong></td>
+        <td>Adaptive (specific)</td>
+        <td>Antibodies, B cells, T cells (Killer T cells), memory B cells & memory T cells</td>
+      </tr>
+    </table>
+    <p style="margin-top:12px; font-size:0.82rem; color:var(--muted);">⚠️ The correct 3rd line answer in the exam is C: Stomach acid → Inflammation → <strong>Antibodies</strong></p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot blue"></span>Innate vs Adaptive Immune System</h3>
+    <ul>
+      <li><span class="highlight">Innate</span> — <strong>always working</strong>, non-specific (attacks any pathogen), no preparation needed. Includes 1st and 2nd lines of defence.</li>
+      <li><span class="highlight blue">Adaptive</span> — <strong>needs to be "primed"</strong> before working fully. Specific — targets a particular pathogen. Includes 3rd line. Creates memory cells.</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot yellow"></span>Fever — Why It Happens</h3>
+    <p>Fever is an <span class="highlight yellow">innate</span> immune response. When pathogens invade, the body raises its temperature. This:</p>
+    <ul style="margin-top:8px;">
+      <li><strong>Speeds up</strong> the immune response (more phagocytes produced faster)</li>
+      <li><strong>Kills or inhibits</strong> many pathogens (they struggle to survive at higher temps)</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot red"></span>Phagocytes — How They Work</h3>
+    <p><span class="highlight red">Phagocytes</span> (neutrophils and macrophages) are white blood cells that <strong>engulf and destroy bacteria</strong>. This process is called <em>phagocytosis</em>. They are part of the <strong>2nd line of defence</strong>.</p>
+    <p style="margin-top:8px;">They do NOT produce antibodies — that's the job of B cells (plasma cells) in the 3rd line.</p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot green"></span>Inflammation</h3>
+    <p>The body responds to infection by becoming <span class="highlight">red, swollen, and painful</span> — this is <strong>inflammation</strong>. It is part of the <strong>2nd line of defence</strong> (innate immune response).</p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot blue"></span>Vaccines & How They Work</h3>
+    <p>Vaccines work by exposing the immune system to a weakened or killed pathogen (or its antigens). This <strong>"primes"</strong> the adaptive immune system so it creates memory cells. When the real pathogen appears, the immune system responds quickly.</p>
+    <p style="margin-top:8px;">Vaccines effectively <span class="highlight blue">increase the number of antibodies</span> available against a specific pathogen.</p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot yellow"></span>Herd Immunity</h3>
+    <ul>
+      <li>Protects a <strong>whole population</strong> when enough individuals are immune to a specific pathogen</li>
+      <li>Can be achieved through <strong>natural infection</strong> or <strong>vaccination</strong></li>
+      <li>Relates to a <strong>specific pathogen</strong> only</li>
+      <li>⚠️ It does NOT only protect those exposed — it protects the whole population (including those who can't be vaccinated)</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot red"></span>Physical vs Chemical Barriers (Innate)</h3>
+    <ul>
+      <li><span class="highlight red">Physical</span>: Skin (blocks entry), mucus membranes, cilia (sweep pathogens out), eyelashes</li>
+      <li><span class="highlight">Chemical</span>: Stomach acid (kills ingested pathogens), sebum/sweat (antimicrobial), tears (contain lysozyme)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- BACTERIA & LAB PAGE -->
+<div id="bacteria-lab" class="page">
+  <div class="section-title">🔬 Bacteria & Lab Skills</div>
+  <div class="section-sub">These topics come straight from your study helpers — high chance of appearing in short answer or the experiment question.</div>
+
+  <div class="info-block">
+    <h3><span class="dot green"></span>Zone of Inhibition</h3>
+    <p>When antibiotic discs are placed on an agar plate with bacteria, a <span class="highlight">clear ring</span> may appear around a disc. This is the <strong>zone of inhibition</strong> (also called a <em>clear zone</em>).</p>
+    <ul style="margin-top:8px;">
+      <li>The clear zone = bacteria <strong>cannot survive</strong> in that area → the antibiotic is <strong>effective</strong></li>
+      <li>No clear zone = bacteria grow right up to the disc → the antibiotic is <strong>NOT effective</strong> against that species</li>
+      <li>A <strong>larger</strong> zone of inhibition = more effective antibiotic</li>
+      <li>The blank disc (Disc B in your exam) = <strong>control</strong>; should have no zone</li>
+    </ul>
+    <p style="margin-top:10px; font-size:0.82rem; color:var(--muted);">In the experiment: Independent variable = the type of antibiotic disc. Variables kept constant = temperature, incubation time, amount of bacteria spread, agar type.</p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot blue"></span>Control Agar Plate — Purpose</h3>
+    <p>The control plate has <strong>only the bacteria</strong> with no antibiotic discs. Its purpose is to confirm that:</p>
+    <ul style="margin-top:8px;">
+      <li>Bacteria grow normally without antibiotics (confirms bacteria are alive and growing)</li>
+      <li>Any zones of inhibition on the experimental plate are caused by the antibiotic, not another factor</li>
+    </ul>
+    <p style="margin-top:8px;">Without the control, you can't be sure your results are valid.</p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot yellow"></span>Biofilms (Bacteria Defence)</h3>
+    <p>A <span class="highlight yellow">biofilm</span> is a community of bacteria that form a protective <strong>sticky layer</strong> around themselves (like a shield).</p>
+    <ul style="margin-top:8px;">
+      <li>Makes bacteria <strong>much harder to kill</strong> with antibiotics</li>
+      <li>Helps bacteria stick to surfaces (e.g. medical implants, teeth — plaque is a biofilm!)</li>
+      <li>Protects bacteria from the immune system</li>
+      <li>This is one reason Influenza/bacteria persist despite treatment</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot red"></span>Pili (on Bacteria)</h3>
+    <p><span class="highlight red">Pili</span> (singular: <em>pilus</em>) are thin, hair-like projections found on the surface of bacteria. They have two main functions:</p>
+    <ul style="margin-top:8px;">
+      <li><strong>Attachment</strong> — allow bacteria to <strong>stick to host cells</strong> (e.g. intestine, urinary tract wall), starting infection</li>
+      <li><strong>Conjugation</strong> — allow bacteria to <strong>transfer genetic material</strong> (including antibiotic resistance genes) to other bacteria</li>
+    </ul>
+    <p style="margin-top:8px; font-size:0.85rem;">Think of pili as bacterial "grappling hooks" — they latch on and can also share DNA.</p>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot green"></span>Antibiotic Resistance — How It Emerges</h3>
+    <p>When antibiotics are <strong>overused or misused</strong>:</p>
+    <ul style="margin-top:8px;">
+      <li>Most bacteria are killed, but a few with <strong>random mutations</strong> survive</li>
+      <li>These resistant bacteria <strong>reproduce rapidly</strong> (natural selection)</li>
+      <li>Resistance genes can be passed via <strong>pili (conjugation)</strong> to other bacteria</li>
+      <li>Result: a resistant strain takes over — antibiotics no longer work</li>
+    </ul>
+    <p style="margin-top:8px; font-size:0.82rem; color:var(--muted);">Chlamydia example: easily treated but persists because many people don't know they're infected (asymptomatic) and don't seek treatment.</p>
+  </div>
+</div>
+
+<!-- DISEASE & SPREAD PAGE -->
+<div id="disease-spread" class="page">
+  <div class="section-title">🌍 Disease Spread & Control</div>
+  <div class="section-sub">Transmission types, Malaria, epidemics vs pandemics — expect these in short answer and SHE sections.</div>
+
+  <div class="info-block">
+    <h3><span class="dot green"></span>Types of Pathogen Transmission</h3>
+    <table class="defence-table">
+      <tr><th>Type</th><th>How it works</th><th>Example pathogens</th></tr>
+      <tr><td><strong>Airborne</strong></td><td>Pathogen travels in air droplets (breathing, coughing, sneezing)</td><td>Influenza, COVID-19, TB, Measles</td></tr>
+      <tr><td><strong>Direct contact</strong></td><td>Touching infected person or surface</td><td>Chlamydia (STI), Impetigo</td></tr>
+      <tr><td><strong>Vector</strong></td><td>Pathogen carried by another organism (mosquito, tick)</td><td>Malaria (mosquito), Yellow Fever (mosquito)</td></tr>
+      <tr><td><strong>Mother to baby</strong></td><td>Passed during pregnancy, birth, or breastfeeding</td><td>HIV, Rubella, Chlamydia</td></tr>
+      <tr><td><strong>Food/Water (fecal-oral)</strong></td><td>Contaminated food or water</td><td>Cholera, Typhoid, E. coli</td></tr>
+      <tr><td><strong>Blood/Bodily fluids</strong></td><td>Shared needles, blood transfusion, sexual contact</td><td>HIV, Hepatitis B, Chlamydia</td></tr>
+    </table>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot blue"></span>Epidemic vs Pandemic</h3>
+    <ul>
+      <li><span class="highlight blue">Epidemic</span> — a disease outbreak that spreads rapidly within a <strong>specific region or community</strong></li>
+      <li><span class="highlight">Pandemic</span> — a disease outbreak that spreads across <strong>multiple countries or worldwide</strong> (e.g. COVID-19 was a pandemic)</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot yellow"></span>Malaria — Key Facts</h3>
+    <ul>
+      <li>Caused by a <span class="highlight yellow">protozoan parasite</span> (not a bacterium or virus!)</li>
+      <li>Transmitted by <strong>Anopheles mosquito</strong> (vector transmission)</li>
+      <li>Symptoms include <strong>cycles of high fever</strong></li>
+      <li>Difficult to control because: mosquitoes are widespread, resistance to drugs/insecticides develops, limited healthcare in 3rd world countries</li>
+      <li>Least effective control: <strong>isolating infected individuals</strong> (it's vector-borne — the mosquito spreads it, not direct person-to-person)</li>
+      <li>Case numbers may be underestimated because: many 3rd world countries lack diagnostic resources/healthcare access</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot red"></span>Influenza & COVID-19</h3>
+    <ul>
+      <li>Influenza can't be eradicated mainly because it <span class="highlight red">mutates rapidly</span> → old antibodies/vaccines become less effective against new strains</li>
+      <li>COVID-19 (SARS-CoV-2): people infected by the original strain are <strong>not necessarily immune to new strains</strong> because mutations change the surface antigens — the immune system's memory cells don't recognise the new strain</li>
+      <li>Note: Influenza is NOT treated with antibiotics (it's a virus)</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot green"></span>Reducing Disease Transmission — Examples</h3>
+    <ul>
+      <li><strong>Vaccination programs</strong> — build herd immunity</li>
+      <li><strong>Quarantine</strong> — prevents infected individuals from spreading disease (advantage); but costly and limits freedom (disadvantage)</li>
+      <li><strong>Hygiene practices</strong> — handwashing, masks</li>
+      <li><strong>Insecticide spraying / netting</strong> — for vector-borne diseases like Malaria</li>
+      <li><strong>Safe sex practices / condoms</strong> — STIs</li>
+      <li><strong>Safe food handling</strong> — food-borne illness</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h3><span class="dot blue"></span>Developed vs Developing Countries & Disease</h3>
+    <p>Infectious diseases cause ~5% of deaths in <strong>developed</strong> countries vs ~50% in <strong>developing</strong> countries. Reasons include:</p>
+    <ul style="margin-top:8px;">
+      <li>Developed countries have better <strong>healthcare access, sanitation, clean water, and vaccination programs</strong></li>
+      <li>Developing countries often lack these resources</li>
+      <li>International travel can spread diseases globally — a risk for both developed and developing countries</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FLASHCARDS PAGE -->
+<div id="flashcards-page" class="page">
+  <div class="section-title">⚡ Flashcard Quiz</div>
+  <div class="section-sub">Flip to reveal the answer, then rate yourself.</div>
+
+  <div class="controls">
+    <select id="categoryFilter" onchange="filterCards()">
+      <option value="all">All topics</option>
+      <option value="pathogens">Pathogens</option>
+      <option value="immunity">Immunity</option>
+      <option value="bacteria">Bacteria & Lab</option>
+      <option value="spread">Disease & Spread</option>
+    </select>
+    <button onclick="shuffleCards()">🔀 Shuffle</button>
+    <button onclick="resetDeck()">↺ Reset</button>
+    <span class="fc-progress" id="fcProgress"></span>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div id="fcContent">
+    <div class="fc-category-label" id="fcCategory"></div>
+    <div class="flashcard-wrap" onclick="flipCard()">
+      <div class="flashcard" id="flashcard">
+        <div class="fc-face fc-front">
+          <div class="label">Question</div>
+          <div class="question-text" id="fcQuestion"></div>
+          <div class="tap-hint">tap to reveal answer</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="label answer">Answer</div>
+          <div class="answer-text" id="fcAnswer"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-buttons">
+      <button class="fc-btn wrong" id="btnWrong" onclick="rateCard('wrong')" disabled>❌ Didn't know</button>
+      <button class="fc-btn almost" id="btnAlmost" onclick="rateCard('almost')" disabled>〜 Almost</button>
+      <button class="fc-btn right" id="btnRight" onclick="rateCard('right')" disabled>✓ Got it</button>
+    </div>
+  </div>
+
+  <div id="fcDone" class="done-state" style="display:none">
+    <div class="big">🎉</div>
+    <h2>Deck complete!</h2>
+    <p>Here's how you went:</p>
+    <div class="score-breakdown">
+      <div class="score-box green"><div class="num" id="scoreRight">0</div><div class="lbl">Got it</div></div>
+      <div class="score-box yellow"><div class="num" id="scoreAlmost">0</div><div class="lbl">Almost</div></div>
+      <div class="score-box red"><div class="num" id="scoreWrong">0</div><div class="lbl">Missed</div></div>
+    </div>
+    <button class="restart-btn" onclick="resetDeck()">Retry deck</button>
+  </div>
+</div>
+
+<script>
+const ALL_CARDS = [
+  // PATHOGENS
+  { cat: 'pathogens', q: 'What is a pathogen?', a: 'A disease-causing microorganism.' },
+  { cat: 'pathogens', q: 'Which pathogen needs a host cell to reproduce?', a: 'Virus — it cannot replicate on its own and must hijack a host cell.' },
+  { cat: 'pathogens', q: 'Which pathogen is treated with antibiotics?', a: 'Bacteria. Antibiotics have no effect on viruses, fungi, or protozoa.' },
+  { cat: 'pathogens', q: 'List pathogens from smallest to largest.', a: 'Virus → Bacterium → Protozoan → Visible Parasite' },
+  { cat: 'pathogens', q: 'What type of pathogen causes Malaria and Yellow Fever?', a: 'Protozoa — they are unicellular eukaryotic organisms capable of movement.' },
+  { cat: 'pathogens', q: 'Give three examples of non-infectious diseases.', a: 'Cancer, Emphysema, Allergies (not caused by pathogens — cannot spread person to person).' },
+  { cat: 'pathogens', q: 'Vaccines are used to prevent diseases caused by which pathogen?', a: 'Viruses (primarily) — e.g. flu vaccine, COVID vaccine, MMR vaccine.' },
+  { cat: 'pathogens', q: 'What is the difference between an infectious and non-infectious disease?', a: 'Infectious = caused by a pathogen, can spread. Non-infectious = not caused by a pathogen, cannot spread (e.g. genetic, lifestyle, or environmental causes).' },
+  { cat: 'pathogens', q: 'What is a disease?', a: 'A condition that disrupts normal body functioning, with a specific set of signs and symptoms.' },
+
+  // IMMUNITY
+  { cat: 'immunity', q: 'What are the three lines of defence?', a: '1st: Physical & chemical barriers (skin, mucus, stomach acid). 2nd: Phagocytes, inflammation, fever. 3rd: Antibodies, B cells, T cells, memory cells.' },
+  { cat: 'immunity', q: 'What is the innate immune system?', a: 'Always working, non-specific (attacks any pathogen), requires no preparation. Includes 1st and 2nd lines of defence.' },
+  { cat: 'immunity', q: 'What is the adaptive immune system?', a: 'Needs to be "primed" first. Specific to a particular pathogen. Creates memory cells. Includes 3rd line (antibodies, T cells, B cells).' },
+  { cat: 'immunity', q: 'What do phagocytes do?', a: 'Engulf and destroy bacteria through phagocytosis. They are neutrophils and macrophages. Part of the 2nd line of defence.' },
+  { cat: 'immunity', q: 'Why does fever occur during infection?', a: 'The body raises its temperature to speed up the immune response and kill/inhibit pathogens that cannot survive at higher temperatures.' },
+  { cat: 'immunity', q: 'Is fever innate or adaptive? Why?', a: 'Innate — it occurs automatically without needing to "learn" the pathogen. It is part of the 2nd line of defence.' },
+  { cat: 'immunity', q: 'How do vaccines prevent disease?', a: 'They expose the immune system to antigens from the pathogen, priming it to produce antibodies and memory cells — so it responds quickly if the real pathogen appears.' },
+  { cat: 'immunity', q: 'What is herd immunity?', a: 'When a large enough proportion of a population is immune to a pathogen (through vaccination or infection), protecting even those who aren\'t immune.' },
+  { cat: 'immunity', q: 'Name two physical and two chemical innate barriers.', a: 'Physical: skin, cilia/mucus. Chemical: stomach acid, sebum/sweat (antimicrobial).' },
+  { cat: 'immunity', q: 'What is inflammation?', a: 'A 2nd line innate response: the body becomes red, swollen, and painful at the site of infection. Increases blood flow and white blood cell delivery.' },
+  { cat: 'immunity', q: 'What is the difference between B cells and T cells?', a: 'B cells produce antibodies (plasma cells) and memory B cells. Killer T cells destroy infected host cells. Both are part of the adaptive (3rd line) immune response.' },
+  { cat: 'immunity', q: 'Which components make up the 2nd line of defence?', a: 'Phagocytes (neutrophils, macrophages), inflammation, and fever.' },
+  { cat: 'immunity', q: 'Why are memory cells important?', a: 'They "remember" a specific pathogen so the immune system can respond much faster and stronger if the same pathogen appears again.' },
+
+  // BACTERIA & LAB
+  { cat: 'bacteria', q: 'What is a zone of inhibition?', a: 'A clear ring around an antibiotic disc on an agar plate where bacteria cannot grow — showing the antibiotic is effective against that microorganism.' },
+  { cat: 'bacteria', q: 'What does NO zone of inhibition mean?', a: 'The bacteria are resistant to that antibiotic — they can grow right up to the disc.' },
+  { cat: 'bacteria', q: 'What is the purpose of the blank disc in the antibiotic experiment?', a: 'It is a negative control — it should have no zone of inhibition, confirming that the disc material itself (not the antibiotic) is not causing the clear zone.' },
+  { cat: 'bacteria', q: 'What is the purpose of the control agar plate?', a: 'To confirm bacteria grow normally without antibiotics, validating that any zones of inhibition on the experimental plate are due to the antibiotic.' },
+  { cat: 'bacteria', q: 'What is the independent variable in an antibiotic sensitivity experiment?', a: 'The type of antibiotic disc (Disc A, C, or P).' },
+  { cat: 'bacteria', q: 'List three variables to keep constant in the antibiotic experiment.', a: 'Temperature of incubation, duration of incubation, volume/concentration of bacteria spread, type of agar, size of discs.' },
+  { cat: 'bacteria', q: 'What is a biofilm and why is it significant?', a: 'A protective sticky layer formed by a community of bacteria. Makes them much harder to kill with antibiotics and helps them resist the immune system.' },
+  { cat: 'bacteria', q: 'What are pili and what do they do?', a: 'Hair-like projections on bacteria. They allow bacteria to: (1) attach to host cells to start infection, and (2) transfer genetic material (including resistance genes) between bacteria via conjugation.' },
+  { cat: 'bacteria', q: 'How does antibiotic resistance develop?', a: 'Overuse of antibiotics kills most bacteria, but those with random mutations that confer resistance survive and reproduce. The resistant bacteria multiply and can pass resistance genes via pili.' },
+  { cat: 'bacteria', q: 'Why does Chlamydia persist despite being easily treated?', a: 'Many people are asymptomatic (no symptoms) so they don\'t know they are infected and don\'t seek treatment, allowing ongoing transmission.' },
+
+  // SPREAD
+  { cat: 'spread', q: 'Name four types of disease transmission.', a: 'Airborne, direct contact, vector (e.g. mosquito), mother to baby, food/water (fecal-oral), blood/bodily fluids.' },
+  { cat: 'spread', q: 'What is the difference between an epidemic and a pandemic?', a: 'Epidemic = rapid spread within a specific region. Pandemic = spread across multiple countries or worldwide (e.g. COVID-19).' },
+  { cat: 'spread', q: 'What causes Malaria and how is it transmitted?', a: 'Malaria is caused by a protozoan parasite, transmitted by the Anopheles mosquito (vector transmission).' },
+  { cat: 'spread', q: 'Why is Malaria difficult to control?', a: 'The mosquito vector is widespread, drug and insecticide resistance develops, limited healthcare in affected regions, and people can be reinfected.' },
+  { cat: 'spread', q: 'Which method is LEAST effective for controlling Malaria?', a: 'Quarantining infected individuals — Malaria is vector-borne (spread by mosquitoes), not person-to-person, so quarantine has little effect.' },
+  { cat: 'spread', q: 'Why can\'t influenza be eradicated through vaccination?', a: 'Influenza mutates rapidly, changing its antigens. Old vaccines and immune memory cells don\'t recognise new strains.' },
+  { cat: 'spread', q: 'Why might someone immune to original COVID-19 catch a new strain?', a: 'New strains have mutated antigens — the memory cells from the original infection don\'t recognise the changed surface proteins of the new strain.' },
+  { cat: 'spread', q: 'Why do developing countries have much higher infectious disease death rates?', a: 'Less access to clean water, sanitation, vaccines, healthcare, and antibiotics. Higher poverty increases exposure to pathogens.' },
+  { cat: 'spread', q: 'What is one advantage and one disadvantage of quarantine?', a: 'Advantage: prevents spread of disease by isolating infectious individuals. Disadvantage: costly, limits personal freedom, may be impractical for large numbers.' },
+  { cat: 'spread', q: 'Name two ways pathogens enter the body and give an example of each.', a: '1. Inhalation (airborne) — influenza enters via respiratory tract. 2. Skin/mucous membranes — Chlamydia enters via sexual contact.' },
+];
+
+let deck = [];
+let currentIndex = 0;
+let isFlipped = false;
+let scores = { right: 0, almost: 0, wrong: 0 };
+
+function filterCards() {
+  const cat = document.getElementById('categoryFilter').value;
+  deck = cat === 'all' ? [...ALL_CARDS] : ALL_CARDS.filter(c => c.cat === cat);
+  resetDeck(false);
+}
+
+function shuffleCards() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  currentIndex = 0;
+  scores = { right: 0, almost: 0, wrong: 0 };
+  showCard();
+  document.getElementById('fcDone').style.display = 'none';
+  document.getElementById('fcContent').style.display = 'block';
+}
+
+function resetDeck(refill = true) {
+  if (refill) {
+    const cat = document.getElementById('categoryFilter').value;
+    deck = cat === 'all' ? [...ALL_CARDS] : ALL_CARDS.filter(c => c.cat === cat);
+  }
+  currentIndex = 0;
+  scores = { right: 0, almost: 0, wrong: 0 };
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('fcDone').style.display = 'none';
+  document.getElementById('fcContent').style.display = 'block';
+  showCard();
+}
+
+function showCard() {
+  if (currentIndex >= deck.length) { showDone(); return; }
+  const card = deck[currentIndex];
+  document.getElementById('fcQuestion').textContent = card.q;
+  document.getElementById('fcAnswer').textContent = card.a;
+  const catNames = { pathogens: '🦠 Pathogens', immunity: '🛡️ Immunity', bacteria: '🔬 Bacteria & Lab', spread: '🌍 Disease & Spread' };
+  document.getElementById('fcCategory').textContent = catNames[card.cat] || '';
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('btnWrong').disabled = true;
+  document.getElementById('btnAlmost').disabled = true;
+  document.getElementById('btnRight').disabled = true;
+  updateProgress();
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+  if (isFlipped) {
+    document.getElementById('btnWrong').disabled = false;
+    document.getElementById('btnAlmost').disabled = false;
+    document.getElementById('btnRight').disabled = false;
+  }
+}
+
+function rateCard(rating) {
+  scores[rating]++;
+  currentIndex++;
+  setTimeout(() => showCard(), 150);
+}
+
+function updateProgress() {
+  const pct = deck.length ? (currentIndex / deck.length) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('fcProgress').textContent = `${currentIndex} / ${deck.length}`;
+}
+
+function showDone() {
+  document.getElementById('fcContent').style.display = 'none';
+  document.getElementById('fcDone').style.display = 'block';
+  document.getElementById('scoreRight').textContent = scores.right;
+  document.getElementById('scoreAlmost').textContent = scores.almost;
+  document.getElementById('scoreWrong').textContent = scores.wrong;
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('fcProgress').textContent = `${deck.length} / ${deck.length}`;
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id === 'flashcards' ? 'flashcards-page' : id).classList.add('active');
+  const navBtns = document.querySelectorAll('nav button');
+  const map = { home: 0, pathogens: 1, immunity: 2, 'bacteria-lab': 3, 'disease-spread': 4, flashcards: 5 };
+  if (map[id] !== undefined) navBtns[map[id]].classList.add('active');
+}
+
+// Init flashcards
+filterCards();
+</script>
+</body>
+</html>
