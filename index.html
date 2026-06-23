@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Term 2 — Study Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:ital,wght@0,400;1,400&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --accent: #58d68d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px 80px;
+  }
+
+  /* DNA strand decoration */
+  .dna-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 40px;
+    align-items: center;
+  }
+  .dna-bar span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    opacity: 0.5;
+  }
+  .dna-bar .seq {
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 52px;
+    max-width: 560px;
+  }
+  header .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  header .eyebrow::before,
+  header .eyebrow::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+  header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  header h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  header p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Cards grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    width: 100%;
+    max-width: 860px;
+  }
+
+  /* First card is wide */
+  .card-featured {
+    grid-column: 1 / -1;
+  }
+
+  .card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .card-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .card h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .topic-chip {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: rgba(88,214,141,0.08);
+    color: var(--accent);
+    border: 1px solid rgba(88,214,141,0.2);
+  }
+  .topic-chip.blue {
+    background: rgba(52,152,219,0.08);
+    color: #3498db;
+    border-color: rgba(52,152,219,0.2);
+  }
+  .topic-chip.yellow {
+    background: rgba(243,156,18,0.08);
+    color: #f39c12;
+    border-color: rgba(243,156,18,0.2);
+  }
+  .topic-chip.red {
+    background: rgba(231,76,60,0.08);
+    color: #e74c3c;
+    border-color: rgba(231,76,60,0.2);
+  }
+  .topic-chip.purple {
+    background: rgba(155,89,182,0.08);
+    color: #a569bd;
+    border-color: rgba(155,89,182,0.2);
+  }
+
+  .card-arrow {
+    color: var(--muted);
+    font-size: 1.1rem;
+    transition: color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+  }
+  .card:hover .card-arrow {
+    color: var(--card-accent, var(--accent));
+    transform: translateX(3px);
+  }
+
+  /* Featured card extras */
+  .card-featured .card-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+  }
+  @media (max-width: 560px) {
+    .card-featured .card-inner { grid-template-columns: 1fr; }
+    .card-featured .fc-badge { display: none; }
+  }
+  .fc-badge {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+  }
+  .fc-badge .stat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: right;
+  }
+  .fc-badge .stat strong {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  footer {
+    margin-top: 56px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--border);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="dna-bar">
+  <span class="seq">A–T–C–G</span>
+  <span>·</span>
+  <span>YR 11</span>
+  <span>·</span>
+  <span class="seq">TERM 2</span>
+</div>
+
+<header>
+  <div class="eyebrow">Biology</div>
+  <h1>Study <em>Hub</em></h1>
+  <p>All your revision resources in one place. Start with the full revision guide, then drill into each line of defence.</p>
+</header>
+
+<div class="grid">
+
+  <!-- FEATURED: Full Revision Site -->
+  <div class="card-featured">
+    <a class="card" href="bio_revision.html" style="--card-accent: #58d68d;">
+      <div class="card-inner">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">🧬</div>
+            <span class="card-tag">Full Revision</span>
+          </div>
+          <h2>Biology Exam Revision Hub</h2>
+          <p>The complete study tool — info summaries on pathogens, immunity, bacteria & lab skills, and disease spread. Includes a 40+ card flashcard quiz with scoring.</p>
+          <div class="card-footer">
+            <div class="card-topics">
+              <span class="topic-chip">Pathogens</span>
+              <span class="topic-chip blue">Immunity</span>
+              <span class="topic-chip yellow">Bacteria & Lab</span>
+              <span class="topic-chip red">Disease Spread</span>
+              <span class="topic-chip purple">⚡ Flashcards</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+        <div class="fc-badge">
+          <div class="stat"><strong>40+</strong>flashcards</div>
+          <div class="stat"><strong>5</strong>topic areas</div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Topic 2.6 -->
+  <a class="card" href="topic-2-6-first-line-of-defence.html" style="--card-accent: #58d68d;">
+    <div class="card-top">
+      <div class="card-icon">🧱</div>
+      <span class="card-tag">Topic 2.6</span>
+    </div>
+    <h2>First Line of Defence</h2>
+    <p>Physical and chemical barriers that stop pathogens before they enter the body.</p>
+    <div class="card-footer">
+      <div class="card-topics">
+        <span class="topic-chip">Skin</span>
+        <span class="topic-chip">Mucus & Cilia</span>
+        <span class="topic-chip">Stomach acid</span>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- Topic 2.7 -->
+  <a class="card" href="topic-2-7-second-line-of-defence.html" style="--card-accent: #3498db;">
+    <div class="card-top">
+      <div class="card-icon">🔥</div>
+      <span class="card-tag">Topic 2.7</span>
+    </div>
+    <h2>Second Line of Defence</h2>
+    <p>The body's internal innate response — phagocytes, inflammation, and fever kick in when pathogens breach the first line.</p>
+    <div class="card-footer">
+      <div class="card-topics">
+        <span class="topic-chip blue">Phagocytes</span>
+        <span class="topic-chip blue">Inflammation</span>
+        <span class="topic-chip blue">Fever</span>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- Topic 2.8 -->
+  <a class="card" href="topic-2-8-third-line-of-defence.html" style="--card-accent: #a569bd;">
+    <div class="card-top">
+      <div class="card-icon">🎯</div>
+      <span class="card-tag">Topic 2.8</span>
+    </div>
+    <h2>Third Line of Defence</h2>
+    <p>The adaptive immune response — B cells, T cells, antibodies, and memory cells that target specific pathogens.</p>
+    <div class="card-footer">
+      <div class="card-topics">
+        <span class="topic-chip purple">B & T Cells</span>
+        <span class="topic-chip purple">Antibodies</span>
+        <span class="topic-chip purple">Memory cells</span>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+</div>
+
+<footer>biology · term 2 · yr 11</footer>
+
+</body>
+</html>
